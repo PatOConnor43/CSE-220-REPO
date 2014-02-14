@@ -1,4 +1,11 @@
 /* Hello World program */
+/*Obviously we need more comments in here as well as our names
+Patrick O'Connor
+Nash Kleppan
+Vishal Mehta
+Group 19
+*/
+
 
 #include<stdio.h>
 
