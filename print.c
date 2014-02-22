@@ -14,11 +14,14 @@ void print_line(char line[], char source_name_to_print[], char date_to_print[])
     }
     if (strlen(line) > MAX_PRINT_LINE_LENGTH) 
     {
-        /* Missing Code Here */
+        save_chp = line + MAX_PRINT_LINE_LENGTH;
+        save_ch = *save_chp;
+        *save_chp = '\0';
     }
     if (save_chp)
     {
-        /* Missing Code Here */
+        printf("%s", line);
+        *save_chp = save_ch;
     }
     /* Missing Code Here */
     if (save_chp)
