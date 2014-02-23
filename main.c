@@ -1,3 +1,8 @@
+/* Nash Kleppan
+ * Vishal Mehta
+ * Patrick O Connor
+ * CSE 230
+ * Spring 2014 ASU */
 #include "common.h"
 
 int main (int argc, const char *argv[])
