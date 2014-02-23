@@ -5,9 +5,6 @@
  * Spring 2014 ASU */
 
 #include "common.h"
-#include <stdio.h>
-#include <time.h>
-//#include "print.c"
 
 int main (int argc, const char *argv[])
 {
@@ -20,6 +17,14 @@ int main (int argc, const char *argv[])
 	source_file = init_lister(argv[1], source_name, date);
 	//Working on getting the print_page_header to work here -PO
 	//print_page_header(argv[1], date);
+
+	
+	char* source_string;
+	int length = strlen(argv[1]);
+	char source_string_array[length];
+	strncpy(source_name, argv[1], length);
+	
+	//print:print_page_header(source_name, date);
 
 	while(get_source_line(source_file, source_name,date))
 	{
