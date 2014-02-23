@@ -18,7 +18,8 @@ void print_line(char line[], char source_name_to_print[], char date_to_print[])
     
     if (++line_count > MAX_LINES_PER_PAGE)
     {
-        /* Missing Code Here */
+        print_page_header(source_name_to_print,date_to_print); //New page if line count +1 is greater than maximum. -NK
+	line_count=1; //Reset line_count to one for the new page. -NK
     }
     if (strlen(line) > MAX_PRINT_LINE_LENGTH) 
     {
@@ -53,4 +54,6 @@ static void print_page_header(char source_name[], char date[])
     printf("%s\t",the_date);
     printf("%s\n", "");
     printf("%s\n", "");
+    //Prepare for a second page by incrementing page_nunber. -NK
+    page_number++;
 }
