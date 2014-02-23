@@ -14,14 +14,14 @@ void print_line(char line[], char source_name_to_print[], char date_to_print[])
 {
     char save_ch;
     char *save_chp = NULL;
-    static int line_count = MAX_LINES_PER_PAGE;
+    static int line_count =0;
     
-    if (++line_count > MAX_LINES_PER_PAGE)
+    if (++line_count > MAX_LINES_PER_PAGE)  //New page if line count +1 is greater than maximum. -NK
     {
-        print_page_header(source_name_to_print,date_to_print); //New page if line count +1 is greater than maximum. -NK
+        print_page_header(source_name_to_print,date_to_print);
 	line_count=1; //Reset line_count to one for the new page. -NK
     }
-    if (strlen(line) > MAX_PRINT_LINE_LENGTH) 
+    if (strlen(line) > MAX_PRINT_LINE_LENGTH) //Truncate string if it is too long. -VM
     {
         save_chp = line + MAX_PRINT_LINE_LENGTH;
         save_ch = *save_chp;
@@ -30,13 +30,10 @@ void print_line(char line[], char source_name_to_print[], char date_to_print[])
     if (save_chp)
     {
         printf("%s", line);
-        *save_chp = save_ch;
+        *save_chp = save_ch; //Restore string. -VM
+	line_count++; //increment line count upon successful printing of the line. -NK
     }
-    /* Missing Code Here */
-    if (save_chp)
-    {
-        /* Missing Code Here */
-    }
+
 }
 static void print_page_header(char source_name[], char date[])
 {
