@@ -18,8 +18,8 @@ FILE *init_lister(const char *name, char source_file_name[], char dte[])
 {
     time_t timer;
     FILE *file;
-    
-    /* Missing Code Here */
+    //Open FILE -NK
+    file=fopen(source_file_name,"r"); //Open source file
     return file;
 }
 BOOLEAN get_source_line(FILE *src_file, char src_name[], char todays_date[])
@@ -28,9 +28,10 @@ BOOLEAN get_source_line(FILE *src_file, char src_name[], char todays_date[])
     char source_buffer[MAX_SOURCE_LINE_LENGTH];
     static int line_number = 0;
     
-    if (1) //This is missing a condition
+    if (fgets(source_buffer,MAX_SOURCE_LINE_LENGTH,src_file) !=Null) //If a source line is found, return true. -NK
     {
-		/*  Missing Code Here */
+	//To be continued
+	line_number++;//increment line number
         return (TRUE);
     }
     else
