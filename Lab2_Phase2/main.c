@@ -7,16 +7,20 @@
 #include "common.h"
 #include <stdio.h>
 #include <time.h>
+#include "print.c"
 
 int main (int argc, const char *argv[])
 {
     FILE *source_file;
     char source_name[MAX_FILE_NAME_LENGTH];
     char date[DATE_STRING_LENGTH];
+	print p;
     
    /* Missing Code Here */
-	//Using the init_lister. Currently only prints date and time -PO
-	init_lister(argv[1], source_name, date);
+	//I finished Init_Listener I think. This should set date and set the file pointer -PO
+	init_lister(argv[0], source_name, date);
+	//Working on getting the print_page_header to work here -PO
+	p.print_page_header(argv[0], date);
     return 0;
 }
 FILE *init_lister(const char *name, char source_file_name[], char dte[])
@@ -26,14 +30,13 @@ FILE *init_lister(const char *name, char source_file_name[], char dte[])
 	
     
     /* Missing Code Here */
-	//Trying to create a newfile with the name of the second input -PO
-	file = fopen(name, "w");
-	fprintf(file, "Testing...\n");
+	//Associates the file pointer with our input file -PO
+	file = fopen("NEWTON.PAS", "r");
 
 
-	//This section of code is just used to print date and time. -PO
+	//This section of code sets the date and time. -PO
 	timer = time(NULL);
-	printf(ctime(&timer));
+	dte = ctime(&timer);
     return file;
 }
 BOOLEAN get_source_line(FILE *src_file, char src_name[], char todays_date[])
