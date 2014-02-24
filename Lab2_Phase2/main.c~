@@ -53,7 +53,6 @@ BOOLEAN get_source_line(FILE *src_file, char src_name[], char todays_date[])
    // printf("%s", fgets(src_name, MAX_SOURCE_LINE_LENGTH, src_file));
     if (fgets(src_name, MAX_SOURCE_LINE_LENGTH, src_file) != NULL) //check if next is not null
     {	
-	fgets(src_name, MAX_SOURCE_LINE_LENGTH, src_file)
 	//need source_name = src_name;	
 	
 	//need sprintf

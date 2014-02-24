@@ -8,7 +8,7 @@
 //I took out some of your includes Nash because they were giving me compile errors :/ -PO
 
 
-static void print_page_header(char source_name[], char date[]);
+static void print_page_header(const char source_name[], char date[]);
 
 void print_line(char line[], char source_name_to_print[], char date_to_print[])
 {
