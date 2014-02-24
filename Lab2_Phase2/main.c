@@ -11,11 +11,8 @@ int main (int argc, const char *argv[])
     FILE *source_file;
     char source_name[MAX_FILE_NAME_LENGTH];
     char date[DATE_STRING_LENGTH];
-	time_t timer = time(NULL);
-	strncpy(date, ctime(&timer), DATE_STRING_LENGTH);
 
 	source_file = init_lister(argv[1], source_name, date);
-
 	while(get_source_line(source_file, source_name,date))
 	{
 		//Nothing to add
@@ -52,20 +49,18 @@ BOOLEAN get_source_line(FILE *src_file, char src_name[], char todays_date[])
     char source_buffer[MAX_SOURCE_LINE_LENGTH]; //next line 
     static int line_number = 0;
 
-   // printf("%s", fgets(src_name, MAX_SOURCE_LINE_LENGTH, src_file));
-    if (fgets(src_name, MAX_SOURCE_LINE_LENGTH, src_file) != NULL) //check if next is not null
+    if (fgets(source_buffer, MAX_SOURCE_LINE_LENGTH, src_file) != NULL) //check if next is not null
     {	
-	fgets(src_name, MAX_SOURCE_LINE_LENGTH, src_file)
 	//need source_name = src_name;	
 	
 	//need sprintf
-	int x =sprintf(print_buffer, "%d:\t%s", line_number, src_name);
+	int x =sprintf(print_buffer, "%d:\t%s", line_number, source_buffer);
 	//need print_line
-	fputs(print_buffer, stdout);
 	print_line(print_buffer, src_name , todays_date);
 	++line_number;
         return (TRUE); // Reads and Prints a line
     }
+
     else
     {
         return (FALSE);
