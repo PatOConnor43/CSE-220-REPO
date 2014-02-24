@@ -4,8 +4,6 @@
  * CSE 230
  * Spring 2014 ASU */
 #include "common.h"
-#include <stdio.h>
-#include <unistd.h>
 
 static void print_page_header(char source_name[], char date[]);
 
