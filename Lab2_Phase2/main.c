@@ -11,6 +11,8 @@ int main (int argc, const char *argv[])
     FILE *source_file;
     char source_name[MAX_FILE_NAME_LENGTH];
     char date[DATE_STRING_LENGTH];
+	time_t timer = time(NULL);
+	strncpy(date, ctime(&timer), DATE_STRING_LENGTH);
 
 	source_file = init_lister(argv[1], source_name, date);
 
