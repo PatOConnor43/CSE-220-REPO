@@ -96,8 +96,8 @@ Token* get_token()
 {
     char ch; //This can be the current character you are examining during scanning.
     char token_string[MAX_TOKEN_STRING_LENGTH]; //Store your token here as you build it.
-    char *token_ptr = ???; //write some code to point this to the beginning of token_string
-    ???;  //I am missing the most important variable in the function, what is it?  Hint: what should I return?
+    char *token_ptr = token_string[0]; //write some code to point this to the beginning of token_string
+    Token* token_return;  //I am missing the most important variable in the function, what is it?  Hint: what should I return?
     
     //1.  Skip past all of the blanks
     //2.  figure out which case you are dealing with LETTER, DIGIT, QUOTE, EOF, or special, by examining ch
@@ -105,32 +105,39 @@ Token* get_token()
     
     return ???; //What should be returned here?
 }
-static ??? get_char(???)
+static char get_char(string_to_check[])
 {
+	
     /*
      If at the end of the current line (how do you check for that?),
      we should call get source line.  If at the EOF (end of file) we should
      set the character ch to EOF and leave the function.
      */
+	char temp_char;
     
     /*
      Write some code to set the character ch to the next character in the buffer
      */
 }
-static ??? skip_blanks(???)
+static char* skip_blanks(char string_that_needs_skipping[])
 {
     /*
      Write some code to skip past the blanks in the program and return a pointer
      to the first non blank character
      */
+	char* ptr = strtok(string_that_needs_skipping, " ");
+	return ptr;
     
 }
-static ??? skip_comment(???)
+static char* skip_comment(char string_that_needs_skipping[])
 {
     /*
      Write some code to skip past the comments in the program and return a pointer
      to the first non blank character.  Watch out for the EOF character.
      */
+	char* ptr = strtok(string_that_needs_skipping, " {}");
+	return ptr;
+
 }
 static ??? get_word(???)
 {
@@ -164,11 +171,19 @@ static ??? get_special(???)
      some are double-character.  Set the token appropriately.
      */
 }
-static ??? downshift_word(???)
+static char* downshift_word(char string_to_downshift[])
 {
     /*
      Make all of the characters in the incoming word lower case.
      */
+	int length = strlen(string_to_downshift);
+	printf("%i\n", length);
+	int i;
+	for(i = 0; i<length; ++i){
+	string_to_downshift[i] = tolower(string_to_downshift[i]);
+	
+	}
+   	return string_to_downshift;
 }
 static BOOLEAN is_reserved_word(???)
 {
