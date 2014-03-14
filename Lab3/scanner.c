@@ -125,8 +125,19 @@ static char* skip_blanks(char string_that_needs_skipping[])
      Write some code to skip past the blanks in the program and return a pointer
      to the first non blank character
      */
-	char* ptr = strtok(string_that_needs_skipping, " ");
+	int i = 0;	//index of string_that_needs_skipping
+	int j = 0;	//index of ptr
+	char* ptr = (char*)malloc(sizeof(char));
+	ptr[0] = '\0';
+	while(string_that_needs_skipping[i] != '\0'){
+		if(string_that_needs_skipping[i] != ' '){
+			ptr[j] = string_that_needs_skipping[i];
+			++j;
+		}
+		++i;
+	}
 	return ptr;
+	free(ptr);
     
 }
 static char* skip_comment(char string_that_needs_skipping[])
@@ -135,9 +146,28 @@ static char* skip_comment(char string_that_needs_skipping[])
      Write some code to skip past the comments in the program and return a pointer
      to the first non blank character.  Watch out for the EOF character.
      */
-	char* ptr = strtok(string_that_needs_skipping, " {}");
-	return ptr;
+	int i = 0;	//index of string_that_needs_skipping
+	int j = 0;	//index of ptr
+	char* ptr = (char*)malloc(sizeof(char));
+	while(string_that_needs_skipping[i] != '\0'){
+		if(string_that_needs_skipping[i] != '{'){
+			ptr[j] = string_that_needs_skipping[i];
+			++j;
+		}
+		if(string_that_needs_skipping[i] == '{'){
+			while(string_that_needs_skipping[i] != '}'){
+				++i;
+			}
+			if(string_that_needs_skipping[i] == '}'){
+				ptr[j] = string_that_needs_skipping[++i];
+				j++;
+			}
+		}
+		++i;
+	}
 
+	return ptr;
+	free(ptr);
 }
 static ??? get_word(???)
 {
