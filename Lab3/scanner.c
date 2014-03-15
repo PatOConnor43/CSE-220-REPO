@@ -18,13 +18,13 @@
  You need to design the proper parameter list and 
  return types for functions with ???.
  ******************/
-static char get_char(???);
+static ??? get_char(???);
 static char* skip_comment(char string_that_needs_skipping[]);
 static char* skip_blanks(char string_that_needs_skipping[]);
 static Token* get_word(char* input_token_ptr);
-static Token* get_number(char *input_string);
-static Token* get_string(char *input_string);
-static Token* get_special(char *input_string);
+static Token* get_number(char* input_token_ptr)
+static Token* get_string(char* input_token_ptr);
+static Token* get_special(char* input_string);
 static char* downshift_word(char string_to_downshift[]);
 static BOOLEAN is_reserved_word(char string_to_check[]);
 
@@ -221,17 +221,44 @@ static Token* get_word(char* input_token_ptr)
 	return token_return;	
 	free(extract);
 }
-static ??? get_number(???)
+static Token* get_number(char* input_token_ptr)
 {
     /*
      Write some code to Extract the number and convert it to a literal number.
      */
+	Token* token_return;
+	token_return->token_code = NUMBER;
+	token_return->literal_value = input_token_ptr;
+	return token_return;
 }
-static ??? get_string(???)
+static Token* get_string(char* input_token_ptr)
 {
     /*
      Write some code to Extract the string
      */
+	char* builder = malloc(sizeof(char));
+	int length = strlen(input_token_ptr)
+	char* the_rest;
+	Token* token_return;
+	token_return->token_code = STRING;
+	int i = 0;
+	for(i = 0; i<length; ++i){
+	builder[i] = input_token_ptr[i];
+	}
+	if(input_token_ptr[length-1] == '\''){
+		token_return->literal_value = builder;
+	}
+	if(input_token_ptr[length-1] == ' '){
+		the_rest = strtok(NULL, "\'");
+		builder = strcat(input_token_ptr, the_rest);
+		i = 0;
+		while(builder[i] != '\0'){
+			builder[i] = builder[++i];
+		}
+		token_return->literal_value = builder;
+	}
+	return token_return;	
+	free(builder);
 }
 static Token* get_special(char *input_string)
 {
