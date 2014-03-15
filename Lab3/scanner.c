@@ -146,7 +146,7 @@ Token* get_token()
 			//add_token_to_list(token_return, get_word(token_ptr));
 		}
 					
-		token_ptr = strtok(NULL, " "); //NEED THIS? OR DO IT IN GET FUNCTIONS?
+		//token_ptr = strtok(NULL, " "); //NEED THIS? OR DO IT IN GET FUNCTIONS?
 		
 	}
 }
