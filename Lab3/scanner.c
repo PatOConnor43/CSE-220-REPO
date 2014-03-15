@@ -18,7 +18,7 @@
  You need to design the proper parameter list and 
  return types for functions with ???.
  ******************/
-static ??? get_char(???);
+//static ??? get_char(???);
 static char* skip_comment(char string_that_needs_skipping[]);
 static char* skip_blanks(char string_that_needs_skipping[]);
 static Token* get_word(char* input_token_ptr);
@@ -150,20 +150,20 @@ Token* get_token()
 		
 	}
 }
-static char get_char(string_to_check[])
+/*static char get_char(string_to_check[])
 {
 	
     /*
      If at the end of the current line (how do you check for that?),
      we should call get source line.  If at the EOF (end of file) we should
      set the character ch to EOF and leave the function.
-     */
+     
 	char temp_char;
     
     /*
      Write some code to set the character ch to the next character in the buffer
-     */
-}
+     
+}*/
 static char* skip_blanks(char string_that_needs_skipping[])
 {
     /*
