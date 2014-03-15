@@ -76,7 +76,7 @@ void print_token(Token *token)
 		}
 		else // if it is a word
 		{
-			if(is_reserved_word(token->token_code)) //if it is a reserved word
+			if(((token->token_code) >= AND) && (token->token_code) >= WITH)) //If the token_code is part of the list of Pascal reserved words.
 			{
 				char *upperCase;// = (char) malloc(sizeof(char));
 				int i;
