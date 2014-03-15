@@ -63,7 +63,7 @@ static void print_page_header(char source_name[], char date[])
 void print_token(Token *token)
 {
     //Missing code goes here
-    char *concatenate_dString = "  >> ";
+    char *concatenate_String = "  >> ";
 	while(token != NULL )
 	{
 		if(token->token_code == NO_TOKEN) //SPECIAL CHARACTERS
@@ -76,7 +76,7 @@ void print_token(Token *token)
 		}
 		else // if it is a word
 		{
-			if(is_reserved_word(token->token_code) //if it is a reserved word
+			if(is_reserved_word(token->token_code)) //if it is a reserved word
 			{
 				char *upperCase = malloc(sizeof(char));
 				int i;
