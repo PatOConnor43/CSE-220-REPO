@@ -18,13 +18,13 @@
  You need to design the proper parameter list and 
  return types for functions with ???.
  ******************/
-static ??? get_char(???);
+static char get_char(???);
 static char* skip_comment(char string_that_needs_skipping[]);
 static char* skip_blanks(char string_that_needs_skipping[]);
 static Token* get_word(char* input_token_ptr);
-static ??? get_number(???);
-static ??? get_string(???);
-static ??? get_special(???);
+static Token* get_number(char *input_string);
+static Token* get_string(char *input_string);
+static Token* get_special(char *input_string);
 static char* downshift_word(char string_to_downshift[]);
 static BOOLEAN is_reserved_word(char string_to_check[]);
 
