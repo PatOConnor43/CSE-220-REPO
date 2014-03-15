@@ -251,7 +251,7 @@ static char* downshift_word(char string_to_downshift[])
 	}
    	return string_to_downshift;
 }
-static BOOLEAN is_reserved_word(???)
+static BOOLEAN is_reserved_word(char string_to_check[])
 {
      /*
      Examine the reserved word table and determine if the function input is a reserved word.
@@ -264,6 +264,9 @@ static BOOLEAN is_reserved_word(???)
 		if(strcmp(rw_table[length-2][i]->string, string_to_check) == 0){
 			return TRUE;
 		}
+		else{
+			return FALSE;
+		}
 	}
-    return FALSE;
+    
 }
