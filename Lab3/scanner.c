@@ -233,12 +233,25 @@ static ??? get_string(???)
      Write some code to Extract the string
      */
 }
-static ??? get_special(???)
+static Token* get_special(char *input_string)
 {
     /*
      Write some code to Extract the special token.  Most are single-character
      some are double-character.  Set the token appropriately.
      */
+	Token *tokenPtr;
+	char val = input_string;
+	tokenPtr->literal_value = {val,'\0'};
+	tokenPtr->token_code = NO_TOKEN;
+	
+	if(input_string[1] != NULL)
+	{
+		tokenPtr = tokenPtr->next;
+		tokenPtr->literal_value = input_string[1];
+	}	
+	
+	return tokenPtr;
+
 }
 static char* downshift_word(char string_to_downshift[])
 {
