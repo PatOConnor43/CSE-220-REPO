@@ -31,7 +31,7 @@ int main(int argc, const char * argv[])
     do
     {
         token = get_token();
-        add_token_to_list(token_list, token);
+        //add_token_to_list(token_list, token);
         print_token(token);
     }
     while (token != NULL);//What is the sentinal value that ends this loop?
@@ -42,6 +42,11 @@ int main(int argc, const char * argv[])
 void add_token_to_list(Token *list, Token *new_token)
 {
     // Add new_token to the list knowing that list is a linked list.
+    while(list->next != NULL)
+	{
+		list = list->next;
+	}
+	list->next = new_token;
 }
 void quit_scanner(FILE *src_file, Token *list)
 {
