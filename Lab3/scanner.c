@@ -12,6 +12,8 @@
 
 #include <stdio.h>
 #include "scanner.h"
+#include "print.c"
+#include "common.h"
 
 /*******************
  Static functions needed for the scanner
@@ -19,10 +21,12 @@
  return types for functions with ???.
  ******************/
 //static ??? get_char(???);
-static char* skip_comment(char string_that_needs_skipping[]);
-static char* skip_blanks(char string_that_needs_skipping[]);
+
+
+static char* skip_comment(char* string_that_needs_skipping);
+static char* skip_blanks(char* string_that_needs_skipping);
 static Token* get_word(char* input_token_ptr);
-static Token* get_number(char* input_token_ptr)
+static Token* get_number(char* input_token_ptr);
 static Token* get_string(char* input_token_ptr);
 static Token* get_special(char* input_string);
 static char* downshift_word(char string_to_downshift[]);
@@ -30,7 +34,7 @@ static BOOLEAN is_reserved_word(char string_to_check[]);
 
 typedef enum
 {
-    LETTER, DIGIT, QUOTE, SPECIAL, EOF_CODE,
+    LETTER, DIGIT, QUOTE, SPECIAL, EOF_CODE
 }
 CharCode;
 
@@ -89,6 +93,8 @@ void init_scanner(FILE *source_file, char source_name[], char date[])
      *******************/
     
 }
+
+
 BOOLEAN get_source_line(char source_buffer[])
 {
     char print_buffer[MAX_SOURCE_LINE_LENGTH + 9];
@@ -164,26 +170,30 @@ Token* get_token()
      Write some code to set the character ch to the next character in the buffer
      
 }*/
-static char* skip_blanks(char string_that_needs_skipping[])
+
+
+static char* skip_blanks(char *string_that_needs_skipping)
 {
     /*
      Write some code to skip past the blanks in the program and return a pointer
      to the first non blank character
      */
-	char *ptr = strtok(string_that_needs_skipping, " ")
+	char *ptr = strtok(string_that_needs_skipping, " ");
 	
 	return ptr;
     
 }
-static char* skip_comment(char string_that_needs_skipping[])
+
+
+static char* skip_comment(char *string_that_needs_skipping)
 {
     /*
      Write some code to skip past the comments in the program and return a pointer
      to the first non blank character.  Watch out for the EOF character.
      */
-		string_that_needs_skipping = strtok(NULL,'}'); //variable to tokenize comment
+		string_that_needs_skipping = strtok(NULL,"}"); //variable to tokenize comment
 	if(string_that_needs_skipping != NULL)
-		string_that_needs_skipping = strtok(NULL,'');
+		string_that_needs_skipping = strtok(NULL," ");
 	
 	return string_that_needs_skipping;
 }
@@ -206,21 +216,26 @@ static Token* get_word(char* input_token_ptr)
      Write some code to Check if the word is a reserved word.
      if it is not a reserved word its an identifier.
      */
-	if(is_reserved_word(extract)){
-		for(i = 0; i < 10; ++i){
-			if(strcmp(rw_table[length-2][i]->string, string_to_check) == 0){
+	if(is_reserved_word(extract))
+	{
+		for(i = 0; i < 10; ++i)
+		{
+			if(strcmp(rw_table[length-2][i]->string, string_to_check) == 0)
+			{
 				token_return->token_code = rw_table[length-2][i]->token_code;
 			}
 		}
 			token_return->literal_value = extract;
 	}
-	else{
+	else
+	{
 		token_return->token_code = IDENTIFIER;
 		token_return->literal_value = extract;
 	}
 	return token_return;	
 	free(extract);
 }
+
 static Token* get_number(char* input_token_ptr)
 {
     /*
@@ -231,28 +246,35 @@ static Token* get_number(char* input_token_ptr)
 	token_return->literal_value = input_token_ptr;
 	return token_return;
 }
+
 static Token* get_string(char* input_token_ptr)
 {
     /*
      Write some code to Extract the string
      */
 	char* builder = malloc(sizeof(char));
-	int length = strlen(input_token_ptr)
+	int length = strlen(input_token_ptr);
 	char* the_rest;
 	Token* token_return;
 	token_return->token_code = STRING;
 	int i = 0;
-	for(i = 0; i<length; ++i){
-	builder[i] = input_token_ptr[i];
+	for(i = 0; i<length; ++i)
+	{
+		builder[i] = input_token_ptr[i];
 	}
-	if(input_token_ptr[length-1] == '\''){
+	
+	if(input_token_ptr[length-1] == '\'')
+	{
 		token_return->literal_value = builder;
 	}
-	if(input_token_ptr[length-1] == ' '){
+	if(input_token_ptr[length-1] == ' ')
+	{
 		the_rest = strtok(NULL, "\'");
 		builder = strcat(input_token_ptr, the_rest);
 		i = 0;
-		while(builder[i] != '\0'){
+
+		while(builder[i] != '\0')
+		{
 			builder[i] = builder[++i];
 		}
 		token_return->literal_value = builder;
@@ -260,6 +282,8 @@ static Token* get_string(char* input_token_ptr)
 	return token_return;	
 	free(builder);
 }
+
+
 static Token* get_special(char *input_string)
 {
     /*
@@ -289,12 +313,15 @@ static char* downshift_word(char string_to_downshift[])
 	int length = strlen(string_to_downshift);
 	printf("%i\n", length);
 	int i;
-	for(i = 0; i<length; ++i){
-	string_to_downshift[i] = tolower(string_to_downshift[i]);
+	for(i = 0; i<length; ++i)
+	{
+		string_to_downshift[i] = tolower(string_to_downshift[i]);
 	
 	}
    	return string_to_downshift;
 }
+
+
 static BOOLEAN is_reserved_word(char string_to_check[])
 {
      /*
@@ -303,12 +330,15 @@ static BOOLEAN is_reserved_word(char string_to_check[])
 	
 
 	int length = strlen(string_to_check);
-	int i = 0
-	for(i = 0; i < 10; ++i){
-		if(strcmp(rw_table[length-2][i]->string, string_to_check) == 0){
+	int i = 0;
+	for(i = 0; i < 10; ++i)
+	{
+		if(strcmp(rw_table[length-2][i]->string, string_to_check) == 0)
+		{
 			return TRUE;
 		}
-		else{
+		else
+		{
 			return FALSE;
 		}
 	}
