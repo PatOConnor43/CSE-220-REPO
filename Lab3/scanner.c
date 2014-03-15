@@ -19,14 +19,14 @@
  return types for functions with ???.
  ******************/
 static ??? get_char(???);
-static ??? skip_comment(???);
-static ??? skip_blanks(???);
-static ??? get_word(???);
+static char* skip_comment(char string_that_needs_skipping[]);
+static char* skip_blanks(char string_that_needs_skipping[]);
+static Token* get_word(char* input_token_ptr);
 static ??? get_number(???);
 static ??? get_string(???);
 static ??? get_special(???);
-static ??? downshift_word(???);
-static BOOLEAN is_reserved_word(???);
+static char* downshift_word(char string_to_downshift[]);
+static BOOLEAN is_reserved_word(char string_to_check[]);
 
 typedef enum
 {
@@ -184,18 +184,39 @@ static char* skip_comment(char string_that_needs_skipping[])
 	return ptr;
 	free(ptr);
 }
-static ??? get_word(???)
+static Token* get_word(char* input_token_ptr)
 {
     /*
      Write some code to Extract the word
      */
-    
+	Token* token_return;
+	char* extract = malloc(sizeof(char));
+	int i = 0;
+	int length = strlen(input_token_ptr);
+	for(i = 0; i < length; ++i){
+		extract[i] = input_token_ptr[i];
+	}
+	    
     //Downshift the word, to make it lower case
-    
+    downshift_word(extract);
     /*
      Write some code to Check if the word is a reserved word.
      if it is not a reserved word its an identifier.
      */
+	if(is_reserved_word(extract)){
+		for(i = 0; i < 10; ++i){
+			if(strcmp(rw_table[length-2][i]->string, string_to_check) == 0){
+				token_return->token_code = rw_table[length-2][i]->token_code;
+			}
+		}
+			token_return->literal_value = extract;
+	}
+	else{
+		token_return->token_code = IDENTIFIER;
+		token_return->literal_value = extract;
+	}
+	return token_return;	
+	free(extract);
 }
 static ??? get_number(???)
 {
@@ -232,8 +253,17 @@ static char* downshift_word(char string_to_downshift[])
 }
 static BOOLEAN is_reserved_word(???)
 {
-    /*
+     /*
      Examine the reserved word table and determine if the function input is a reserved word.
      */
+	
+
+	int length = strlen(string_to_check);
+	int i = 0
+	for(i = 0; i < 10; ++i){
+		if(strcmp(rw_table[length-2][i]->string, string_to_check) == 0){
+			return TRUE;
+		}
+	}
     return FALSE;
 }
