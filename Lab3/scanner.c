@@ -277,6 +277,7 @@ static Token* get_special(char *input_string)
 		tokenPtr->literal_value = input_string[1];
 	}	
 	
+	input_string = strtok(NULL, " ");
 	return tokenPtr;
 
 }
