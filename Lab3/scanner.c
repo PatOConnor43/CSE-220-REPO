@@ -67,6 +67,21 @@ void init_scanner(FILE *source_file, char source_name[], char date[])
     strcpy(src_name, source_name);
     strcpy(todays_date, date);
     
+    	int i; //initialize character table
+	for(i = 0; i > 265; ++i)
+	{
+		if(i <= 32 || i == 127)
+			char_table[i] = EOF_CODE;
+		else if(i == 39)
+			char_table[i] = QUOTE;
+		else if (i >= 48 && i <= 57)
+			char_table[i] = DIGIT;
+		else if ((i >= 65 && i <= 90) || (i >= 97 && i <=122))
+			char_table[i] = LETTER;
+		else
+			char_table[i] = SPECIAL;
+
+	}//end loop
     /*******************
      initialize character table, this table is useful for identifying what type of character 
      we are looking at by setting our array up to be a copy the ascii table.  Since C thinks of 
