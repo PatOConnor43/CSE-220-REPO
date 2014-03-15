@@ -63,4 +63,33 @@ static void print_page_header(char source_name[], char date[])
 void print_token(Token *token)
 {
     //Missing code goes here
+    char *concatenate_dString = "  >> ";
+	while(token != NULL )
+	{
+		if(token->token_code == NO_TOKEN) //SPECIAL CHARACTERS
+		{
+			sprintf(concatenate_string, "%0s%18s", token->literal_value, token->literal_value);
+		}
+		else if(token->token_code == NUMBER )
+		{
+			sprintf(concatenate_string, "%0s%18s", STRING_TABLE[NUMBER], token->literal_value);
+		}
+		else // if it is a word
+		{
+			if(is_reserved_word(token->token_code) //if it is a reserved word
+			{
+				char *upperCase = malloc(sizeof(char));
+				int i;
+				for(i = 0; i < strlen(token->literal_value); ++i)
+					upperCase[i] = toupper(token->literal_value[i]);
+				sprintf(concatenate_string, "%0s%18s", uppperCase, token->literal_value);
+			}
+			else //non-reserved word
+			{
+				sprintf(concatenate_string, "%0s%18s", STRING_TABLE[IDENTIFIER], token->literal_value);
+			}
+		}		
+		puts(concatenate_string); //print stuff
+		token = token->next; //go to next word
+	}//end while
 }
