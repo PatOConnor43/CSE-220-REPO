@@ -109,16 +109,46 @@ BOOLEAN get_source_line(char source_buffer[])
 }
 Token* get_token()
 {
-    char ch; //This can be the current character you are examining during scanning.
+       char ch; //This can be the current character you are examining during scanning.
     char token_string[MAX_TOKEN_STRING_LENGTH]; //Store your token here as you build it.
-    char *token_ptr = token_string[0]; //write some code to point this to the beginning of token_string
+     //write some code to point this to the beginning of token_string
     Token* token_return;  //I am missing the most important variable in the function, what is it?  Hint: what should I return?
-    
-    //1.  Skip past all of the blanks
-    //2.  figure out which case you are dealing with LETTER, DIGIT, QUOTE, EOF, or special, by examining ch
-    //3.  Call the appropriate function to deal with the cases in 2.
-    
-    return ???; //What should be returned here?
+	    
+	get_source_line(token_string);
+	char *token_ptr = skip_blanks(token_string); //points
+	token_return = token_ptr;
+
+	while(token_ptr != NULL)
+	{
+		//check the string
+		int x char_val = token_ptr[0];
+		if(char_table[x] = LETTER)
+		{
+			add_token_to_list(token_return, get_word(token_ptr));
+		}
+		else if(char_table[x] = DIGIT)
+		{
+			add_token_to_list(token_return, get_number(token_ptr));
+		}
+		else if(char_table[x] = SPECIAL)
+		{
+			if(token_ptr[0] == '{')
+				token_ptr = skip_comment(token_ptr);			
+			else 
+				add_token_to_list(token_return, get_special(token_ptr));
+		}
+		else if(char_table[x] = QUOTE)
+		{
+			add_token_to_list(token_return, get_string(token_ptr));
+		}
+		else //char_table[x] = EOF
+		{
+			//add_token_to_list(token_return, get_word(token_ptr));
+		}
+					
+		token_ptr = strtok(NULL, " "); //NEED THIS? OR DO IT IN GET FUNCTIONS?
+		
+	}
 }
 static char get_char(string_to_check[])
 {
@@ -140,19 +170,9 @@ static char* skip_blanks(char string_that_needs_skipping[])
      Write some code to skip past the blanks in the program and return a pointer
      to the first non blank character
      */
-	int i = 0;	//index of string_that_needs_skipping
-	int j = 0;	//index of ptr
-	char* ptr = (char*)malloc(sizeof(char));
-	ptr[0] = '\0';
-	while(string_that_needs_skipping[i] != '\0'){
-		if(string_that_needs_skipping[i] != ' '){
-			ptr[j] = string_that_needs_skipping[i];
-			++j;
-		}
-		++i;
-	}
+	char *ptr = strtok(string_that_needs_skipping, " ")
+	
 	return ptr;
-	free(ptr);
     
 }
 static char* skip_comment(char string_that_needs_skipping[])
@@ -161,28 +181,11 @@ static char* skip_comment(char string_that_needs_skipping[])
      Write some code to skip past the comments in the program and return a pointer
      to the first non blank character.  Watch out for the EOF character.
      */
-	int i = 0;	//index of string_that_needs_skipping
-	int j = 0;	//index of ptr
-	char* ptr = (char*)malloc(sizeof(char));
-	while(string_that_needs_skipping[i] != '\0'){
-		if(string_that_needs_skipping[i] != '{'){
-			ptr[j] = string_that_needs_skipping[i];
-			++j;
-		}
-		if(string_that_needs_skipping[i] == '{'){
-			while(string_that_needs_skipping[i] != '}'){
-				++i;
-			}
-			if(string_that_needs_skipping[i] == '}'){
-				ptr[j] = string_that_needs_skipping[++i];
-				j++;
-			}
-		}
-		++i;
-	}
-
-	return ptr;
-	free(ptr);
+		string_that_needs_skipping = strtok(NULL,'}'); //variable to tokenize comment
+	if(string_that_needs_skipping != NULL)
+		string_that_needs_skipping = strtok(NULL,'');
+	
+	return string_that_needs_skipping;
 }
 static Token* get_word(char* input_token_ptr)
 {
