@@ -215,9 +215,9 @@ static Token* get_word(char* input_token_ptr)
 	{
 		for(i = 0; i < 10; ++i)
 		{
-			if(strcmp(rw_table[length-2][i]->string, string_to_check) == 0)
+			if(strcmp(rw_table[length-2][i].string, string_to_check) == 0)
 			{
-				token_return->token_code = rw_table[length-2][i]->token_code;
+				token_return->token_code = rw_table[length-2][i].token_code;
 			}
 		}
 
@@ -359,7 +359,7 @@ static BOOLEAN is_reserved_word(char* string_to_check)
 	int i = 0;
 	for(i = 0; i < 10; ++i)
 	{
-		if(strcmp(rw_table[length-2][i]->string, string_to_check) == 0)
+		if(strcmp(rw_table[length-2][i].string, string_to_check) == 0)
 		{
 			return TRUE;
 		}
