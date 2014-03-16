@@ -274,7 +274,7 @@ static Token* get_string(char* input_token_ptr)
 	char* string;
 
 	//set literal_value and update input_token_ptr
-	if(strspn(input_token_ptr, (int)'\'') == 2) //contains the entire comment in first word
+	if(strspn(input_token_ptr, (char*)'\'') == 2) //contains the entire comment in first word
 	{
 		int i;
 		for(i = 1; i < length; ++i)
@@ -293,7 +293,7 @@ static Token* get_string(char* input_token_ptr)
 		string = &input_token_ptr[1];
 		input_token_ptr = strtok(NULL, " ");//go to next word
 		
-		while(strspn(input_token_ptr, '\'') != 1 ) //find second apostrophe
+		while(strspn(input_token_ptr, (char*)'\'') != 1 ) //find second apostrophe
 		{
 			sprintf(string, " %s", input_token_ptr);
 			input_token_ptr = strtok(NULL, " ");
