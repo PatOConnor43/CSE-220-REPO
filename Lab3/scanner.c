@@ -294,15 +294,16 @@ static Token* get_special(char *input_string)
 	tokenPtr->literal_value = {val,'\0'};
 	tokenPtr->token_code = NO_TOKEN;
 	
-	if(input_string[1] != NULL)
-	{
-		tokenPtr = tokenPtr->next;
-		tokenPtr->literal_value = *input_string[1];
-	}	
 	
-	input_string = strtok(NULL, " ");
-	return tokenPtr;
+	//update input_string pointer
+	if(input_string[1] != EOF)
+	{
+		&input_string[0] = &input[1];
+	}	
+	else
+		input_string = strtok(NULL, " ");
 
+	return tokenPtr;
 }
 static char* downshift_word(char* string_to_downshift)
 {
