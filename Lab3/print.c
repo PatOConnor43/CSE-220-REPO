@@ -81,7 +81,8 @@ void print_token(Token *token)
 		}
 		else // if it is a word
 		{
-			if(is_reserved_word(token->literal_value)) //if it is a reserved word
+			char* tmp = token->literal_value;
+			if(is_reserved_word(tmp)) //if it is a reserved word
 			{
 				char *upperCase;// = (char) malloc(sizeof(char));
 				int i;
