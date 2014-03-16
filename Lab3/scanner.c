@@ -129,24 +129,25 @@ Token* get_token()
 		while(token_ptr != NULL) 
 		{
 			//check the first character of string
-			int x = token_ptr[0];
-			
-			if(char_table[x] = LETTER)
+			char dgaf= (char)token_ptr[0];
+			int x = (int)dgaf;
+			if(char_table[x] == LETTER)
 			{
 				add_token_to_list(token_return, get_word(token_ptr)); //store to token_return
+				printf("%s\n","Son of a bitch!");
 			}
-			else if(char_table[x] = DIGIT)
+			else if(char_table[x] == DIGIT)
 			{
 				add_token_to_list(token_return, get_number(token_ptr));
 			}
-			else if(char_table[x] = SPECIAL)
+			else if(char_table[x] == SPECIAL)
 			{
 				if(x == 123) //check if first character is '{'
 					token_ptr = skip_comment(token_ptr);			
 				else 
 					add_token_to_list(token_return, get_special(token_ptr));
 			}
-			else if(char_table[x] = QUOTE)
+			else if(char_table[x] == QUOTE)
 			{
 				add_token_to_list(token_return, get_string(token_ptr));
 			}
@@ -344,7 +345,8 @@ static char* downshift_word(char* string_to_downshift)
 	char* downshifted = (char*)malloc(sizeof(char));
 	int i;	
 	int length = strlen(string_to_downshift);
-	for(i = 0; i<length;++i){
+	for(i = 0; i<length;++i)
+	{
 		downshifted[i] = string_to_downshift[i];
 	}
 	for(i = 0; i<length; ++i)
