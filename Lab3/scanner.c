@@ -341,15 +341,19 @@ static char* downshift_word(char* string_to_downshift)
     /*
      Make all of the characters in the incoming word lower case.
      */
+	char* downshifted = (char*)malloc(sizeof(char));
+	int i;	
 	int length = strlen(string_to_downshift);
-	printf("%i\n", length);
-	int i;
+	for(i = 0; i<length;++i){
+		downshifted[i] = string_to_downshift[i];
+	}
 	for(i = 0; i<length; ++i)
 	{
-		string_to_downshift[i] = tolower(string_to_downshift[i]); //cast a char?
+		downshifted[i] = tolower(downshifted[i]); //cast a char?
 	
 	}
-   	return string_to_downshift;
+   	return downshifted;
+	free(downshifted);
 }
 
 
