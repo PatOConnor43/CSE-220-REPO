@@ -12,7 +12,6 @@
 
 #include <stdio.h>
 #include "scanner.h"
-#include "print.c"
 #include "common.h"
 
 /*******************
