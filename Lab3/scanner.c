@@ -321,7 +321,8 @@ static Token* get_special(char *input_string)
      */
 	Token *tokenPtr;
 	char val = input_string[0];
-	tokenPtr->literal_value = {val,'\0'};
+	char tmp[]= {val,'\0'};
+	tokenPtr->literal_value = tmp;
 	tokenPtr->token_code = NO_TOKEN;
 	
 	
