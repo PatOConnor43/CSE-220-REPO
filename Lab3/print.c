@@ -11,6 +11,7 @@
 //
 
 #include "print.h"
+#include "scanner.h"
 
 const char* const SYMBOL_STRINGS[] =
 {
@@ -53,6 +54,8 @@ void print_line(char line[], char source_name_to_print[], char date_to_print[])
         *save_chp = save_ch;
     }
 }
+
+
 static void print_page_header(char source_name[], char date[])
 {
     static int page_number = 0;
@@ -60,6 +63,8 @@ static void print_page_header(char source_name[], char date[])
     putchar(FORM_FEED_CHAR);
     printf("Page    %d  %s  %s\n\n", ++page_number, source_name, date);
 }
+
+
 void print_token(Token *token)
 {
     //Missing code goes here
@@ -76,22 +81,22 @@ void print_token(Token *token)
 		}
 		else // if it is a word
 		{
-			if(((token->token_code) >= AND) && ((token->token_code) >= WITH)) //If the token_code is part of the list of Pascal reserved words.
+			if(is_reserved_word(token->literal_value)) //if it is a reserved word
 			{
 				char *upperCase;// = (char) malloc(sizeof(char));
 				int i;
 				for(i = 0; i < strlen(token->literal_value); ++i)
-				{
 					upperCase[i] = toupper(token->literal_value[i]);
-				}
 				sprintf(concatenate_string, "%1s%18s", upperCase, token->literal_value);
 			}
 			else //non-reserved word
 			{
-				sprintf(concatenate_string, "%1s%18s", SYMBOL_STRINGS[IDENTIFIER], token->literal_value);
+				sprintf(concatenate_string, "%1s%18s", SYMBOL_STRINGS[token->token_code], token->literal_value);
 			}
 		}		
 		puts(concatenate_string); //print stuff
 		token = token->next; //go to next word
+
 	}//end while
-}
+
+}//end print_token
