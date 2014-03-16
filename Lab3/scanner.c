@@ -259,7 +259,7 @@ static Token* get_number(char* input_token_ptr)
 
 static Token* get_string(char* input_token_ptr)
 {
-    /*
+      /*
      Write some code to Extract the string
      */
 	//char* builder = malloc(sizeof(char));
@@ -268,17 +268,44 @@ static Token* get_string(char* input_token_ptr)
 	int length = strlen(input_token_ptr);
 	Token* token_return;
 	token_return->token_code = STRING;
-	char* string = "";
+	char* string;
 
 	//set literal_value and update input_token_ptr
-
+	if(strspn(input_token_ptr, (int)'\'') == 2) //contains the entire comment in first word
+	{
+		int i;
+		for(i = 1; i < length; ++i)
+			if(input_token_ptr[i] == '\'')
+				break;
+		
+		int j;
+		for(j = 1; j < i; ++j)
+			token_return->literal_value[j] = input_token_ptr[j];
+		
+		//update pointer's address
+		&input_token_ptr[0] = &input_token_ptr[i+1];
+	}
+	else
+	{
+		&string[0] = input_token_ptr[1];
+		input_token_ptr = strtok(NULL, " ");//go to next word
+		
+		while(strspn(input_token_ptr, '\'') != 1 ) //find second apostrophe
+		{
+			sprintf(string, " %s", input_token_ptr);
+			input_token_ptr = strtok(NULL, " ");
+			if(input_token_ptr == NULL) //reach EOF before reaching apostrophe
+			{
+				return token_return = NULL;
+			}
+		}
+	}
 	
 
 	//update input_token_ptr
-	if(input_token_ptr
-	input_token_ptr = strtok(NULL, " "); //points to beginning of next word
+	//points to beginning of next word
 
-	return token_return;	
+	return token_return;		
 	//free(builder);
 }
 
