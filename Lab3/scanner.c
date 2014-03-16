@@ -151,9 +151,9 @@ Token* get_token()
 			{
 				add_token_to_list(token_return, get_string(token_ptr));
 			}
-			else //char_table[x] = EOF
+			else //char_table[x] = EOF //if first character is space in tokenization process
 			{
-				//add_token_to_list(token_return, get_word(token_ptr));
+				char *token_ptr = skip_blanks(token_string);
 			}
 
 		} //end while loop			
@@ -194,10 +194,11 @@ static Token* get_word(char* input_token_ptr)
 	
 	Token* token_return;
 	int length = strlen(input_token_ptr);
+	int i = 0;
 
 /****	
 	char* extract = malloc(sizeof(char));
-	int i = 0;
+	
 
 	for(i = 0; i < length; ++i){
 		extract[i] = input_token_ptr[i];
@@ -213,7 +214,7 @@ static Token* get_word(char* input_token_ptr)
 	
 	if(is_reserved_word(input_token_ptr))
 	{
-		int i;
+
 		for(i = 0; i < 10; ++i)
 		{
 			if(strcmp(rw_table[length-2][i].string, input_token_ptr) == 0)
@@ -232,7 +233,7 @@ static Token* get_word(char* input_token_ptr)
 
 	//update input_token_ptr
 	if(char_table[(int) input_token_ptr[length-1]] ==SPECIAL)
-		input_token_ptr = input_token_ptr[length-1];
+		input_token_ptr = &input_token_ptr[length-1];
 	else
 		input_token_ptr = strtok(NULL, " ");	
 
@@ -248,10 +249,11 @@ static Token* get_number(char* input_token_ptr)
 	Token* token_return;
 	token_return->token_code = NUMBER;
 	token_return->literal_value = input_token_ptr;
+	int length = strlen(input_token_ptr);
 
 	//update input_token_ptr
 	if(char_table[(int) input_token_ptr[length-1]] == SPECIAL)
-		input_token_ptr = input_token_ptr[length-1];
+		input_token_ptr = &input_token_ptr[length-1];
 	else
 		input_token_ptr = strtok(NULL, " ");
 
@@ -260,7 +262,7 @@ static Token* get_number(char* input_token_ptr)
 
 static Token* get_string(char* input_token_ptr)
 {
-      /*
+    /*
      Write some code to Extract the string
      */
 	//char* builder = malloc(sizeof(char));
@@ -284,11 +286,11 @@ static Token* get_string(char* input_token_ptr)
 			token_return->literal_value[j] = input_token_ptr[j];
 		
 		//update pointer's address
-		&input_token_ptr[0] = &input_token_ptr[i+1];
+		input_token_ptr = &input_token_ptr[i+1];
 	}
 	else
 	{
-		&string[0] = input_token_ptr[1];
+		string = &input_token_ptr[1];
 		input_token_ptr = strtok(NULL, " ");//go to next word
 		
 		while(strspn(input_token_ptr, '\'') != 1 ) //find second apostrophe
@@ -306,8 +308,8 @@ static Token* get_string(char* input_token_ptr)
 	//update input_token_ptr
 	//points to beginning of next word
 
-	return token_return;		
-	//free(builder);
+	return token_return;	
+
 }
 
 
@@ -319,19 +321,20 @@ static Token* get_special(char *input_string)
      */
 	Token *tokenPtr;
 	char val = input_string[0];
-	tokenPtr->literal_value = [val,'\0'];
+	tokenPtr->literal_value = {val,'\0'};
 	tokenPtr->token_code = NO_TOKEN;
 	
 	
 	//update input_string pointer
 	if(input_string[1] != EOF)
 	{
-		&input_string[0] = &input[1];
+		input_string = &input_string[1];
 	}	
 	else
 		input_string = strtok(NULL, " ");
 
 	return tokenPtr;
+
 }
 static char* downshift_word(char* string_to_downshift)
 {
