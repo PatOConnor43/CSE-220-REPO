@@ -28,7 +28,7 @@
 
 typedef enum
 {
-    FALSE, TRUE,
+    FALSE, TRUE
 }
 BOOLEAN;
 
@@ -44,7 +44,7 @@ typedef enum
     ARRAY, BEGIN, CASE, CONST, DIV, DO, DOWNTO, ELSE, END, FFILE,
     FOR, FUNCTION, GOTO, IF, IN, LABEL, MOD, NIL, NOT, OF, OR, PACKED,
     PROCEDURE, PROGRAM, RECORD, REPEAT, SET, THEN, TO, TYPE, UNTIL,
-    VAR, WHILE, WITH,
+    VAR, WHILE, WITH
 }
 TokenCode;
 
@@ -53,7 +53,7 @@ TokenCode;
  *****************************/
 typedef enum
 {
-    INTEGER_LIT, REAL_LIT, STRING_LIT,
+    INTEGER_LIT, REAL_LIT, STRING_LIT
 }
 LiteralType;
 
@@ -64,9 +64,9 @@ LiteralType;
  ***************/
 typedef struct TokenList
 {
-    	//LiteralType token_type;
+    //LiteralType token_type;
 	TokenCode token_code;
-	char *literal_value;
+	char* literal_value;
 	struct TokenList* next;
 }
 Token;
