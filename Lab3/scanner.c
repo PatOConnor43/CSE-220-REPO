@@ -213,9 +213,10 @@ static Token* get_word(char* input_token_ptr)
 	
 	if(is_reserved_word(input_token_ptr))
 	{
+		int i;
 		for(i = 0; i < 10; ++i)
 		{
-			if(strcmp(rw_table[length-2][i].string, string_to_check) == 0)
+			if(strcmp(rw_table[length-2][i].string, input_token_ptr) == 0)
 			{
 				token_return->token_code = rw_table[length-2][i].token_code;
 			}
@@ -318,7 +319,7 @@ static Token* get_special(char *input_string)
      */
 	Token *tokenPtr;
 	char val = input_string[0];
-	tokenPtr->literal_value = {val,'\0'};
+	tokenPtr->literal_value = [val,'\0'];
 	tokenPtr->token_code = NO_TOKEN;
 	
 	

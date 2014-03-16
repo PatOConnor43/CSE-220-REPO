@@ -76,12 +76,14 @@ void print_token(Token *token)
 		}
 		else // if it is a word
 		{
-			if(((token->token_code) >= AND) && (token->token_code) >= WITH)) //If the token_code is part of the list of Pascal reserved words.
+			if(((token->token_code) >= AND) && ((token->token_code) >= WITH)) //If the token_code is part of the list of Pascal reserved words.
 			{
 				char *upperCase;// = (char) malloc(sizeof(char));
 				int i;
 				for(i = 0; i < strlen(token->literal_value); ++i)
+				{
 					upperCase[i] = toupper(token->literal_value[i]);
+				}
 				sprintf(concatenate_string, "%1s%18s", upperCase, token->literal_value);
 			}
 			else //non-reserved word

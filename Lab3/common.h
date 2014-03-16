@@ -64,9 +64,9 @@ LiteralType;
  ***************/
 typedef struct TokenList
 {
-    LiteralType token_type;
+    	//LiteralType token_type;
 	TokenCode token_code;
-	char literal_value;
+	char *literal_value;
 	struct TokenList* next;
 }
 Token;
