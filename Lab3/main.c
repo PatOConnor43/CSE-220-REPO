@@ -51,7 +51,7 @@ void add_token_to_list(Token *list, Token *new_token)
 void quit_scanner(FILE *src_file, Token *list)
 {
     //write code to free all of the memory for the token list
-
+	free(list);
     fclose(src_file);
 }
 FILE *init_lister(const char *name, char source_file_name[], char dte[])
@@ -65,4 +65,3 @@ FILE *init_lister(const char *name, char source_file_name[], char dte[])
     strcpy(dte, asctime(localtime(&timer)));
     return file;
 }
-
