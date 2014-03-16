@@ -29,8 +29,8 @@ static Token* get_word(char* input_token_ptr);
 static Token* get_number(char* input_token_ptr);
 static Token* get_string(char* input_token_ptr);
 static Token* get_special(char* input_string);
-static char* downshift_word(char string_to_downshift[]);
-static BOOLEAN is_reserved_word(char string_to_check[]);
+static char* downshift_word(char* string_to_downshift);
+static BOOLEAN is_reserved_word(char* string_to_check);
 
 typedef enum
 {
@@ -94,7 +94,8 @@ void init_scanner(FILE *source_file, char source_name[], char date[])
     
 }
 
-
+//get next line from file and store in source_buffer
+//prints next line
 BOOLEAN get_source_line(char source_buffer[])
 {
     char print_buffer[MAX_SOURCE_LINE_LENGTH + 9];
@@ -113,75 +114,61 @@ BOOLEAN get_source_line(char source_buffer[])
         return (FALSE);
     }
 }
+
+
 Token* get_token()
 {
-       char ch; //This can be the current character you are examining during scanning.
     char token_string[MAX_TOKEN_STRING_LENGTH]; //Store your token here as you build it.
-     //write some code to point this to the beginning of token_string
-    Token* token_return;  //I am missing the most important variable in the function, what is it?  Hint: what should I return?
+
+    Token* token_return;  //value to be returned
 	    
-	get_source_line(token_string);
-	char *token_ptr = skip_blanks(token_string); //points
-	token_return = token_ptr;
-
-	while(token_ptr != NULL)
+	if(get_source_line(token_string)) //next line is stored in token_string
 	{
-		//check the string
-		int x char_val = token_ptr[0];
-		if(char_table[x] = LETTER)
+		char *token_ptr = skip_blanks(token_string); //tokenize to point to first non-space character
+
+		//build linked list
+		while(token_ptr != NULL) 
 		{
-			add_token_to_list(token_return, get_word(token_ptr));
-		}
-		else if(char_table[x] = DIGIT)
-		{
-			add_token_to_list(token_return, get_number(token_ptr));
-		}
-		else if(char_table[x] = SPECIAL)
-		{
-			if(token_ptr[0] == '{')
-				token_ptr = skip_comment(token_ptr);			
-			else 
-				add_token_to_list(token_return, get_special(token_ptr));
-		}
-		else if(char_table[x] = QUOTE)
-		{
-			add_token_to_list(token_return, get_string(token_ptr));
-		}
-		else //char_table[x] = EOF
-		{
-			//add_token_to_list(token_return, get_word(token_ptr));
-		}
-					
-		//token_ptr = strtok(NULL, " "); //NEED THIS? OR DO IT IN GET FUNCTIONS?
-		
-	}
-}
-/*static char get_char(string_to_check[])
-{
+			//check the first character of string
+			int x = token_ptr[0];
+			
+			if(char_table[x] = LETTER)
+			{
+				add_token_to_list(token_return, get_word(token_ptr)); //store to token_return
+			}
+			else if(char_table[x] = DIGIT)
+			{
+				add_token_to_list(token_return, get_number(token_ptr));
+			}
+			else if(char_table[x] = SPECIAL)
+			{
+				if(x == 123) //check if first character is '{'
+					token_ptr = skip_comment(token_ptr);			
+				else 
+					add_token_to_list(token_return, get_special(token_ptr));
+			}
+			else if(char_table[x] = QUOTE)
+			{
+				add_token_to_list(token_return, get_string(token_ptr));
+			}
+			else //char_table[x] = EOF
+			{
+				//add_token_to_list(token_return, get_word(token_ptr));
+			}
+
+		} //end while loop			
+
+	} //end if statement
 	
-    /*
-     If at the end of the current line (how do you check for that?),
-     we should call get source line.  If at the EOF (end of file) we should
-     set the character ch to EOF and leave the function.
-     
-	char temp_char;
-    
-    /*
-     Write some code to set the character ch to the next character in the buffer
-     
-}*/
+	return token_return;
+}// end function
 
 
+//returns pointer that points to first non-space character in the word
 static char* skip_blanks(char *string_that_needs_skipping)
 {
-    /*
-     Write some code to skip past the blanks in the program and return a pointer
-     to the first non blank character
-     */
 	char *ptr = strtok(string_that_needs_skipping, " ");
-	
 	return ptr;
-    
 }
 
 
@@ -191,32 +178,40 @@ static char* skip_comment(char *string_that_needs_skipping)
      Write some code to skip past the comments in the program and return a pointer
      to the first non blank character.  Watch out for the EOF character.
      */
-		string_that_needs_skipping = strtok(NULL,"}"); //variable to tokenize comment
+	string_that_needs_skipping = strtok(NULL,"}"); //variable to tokenize comment
 	if(string_that_needs_skipping != NULL)
 		string_that_needs_skipping = strtok(NULL," ");
 	
 	return string_that_needs_skipping;
 }
+
+
 static Token* get_word(char* input_token_ptr)
 {
     /*
      Write some code to Extract the word
      */
+	
 	Token* token_return;
+	int length = strlen(input_token_ptr);
+
+/****	
 	char* extract = malloc(sizeof(char));
 	int i = 0;
-	int length = strlen(input_token_ptr);
+
 	for(i = 0; i < length; ++i){
 		extract[i] = input_token_ptr[i];
 	}
-	    
+***/
+
     //Downshift the word, to make it lower case
-    downshift_word(extract);
+    downshift_word(input_token_ptr); 
     /*
      Write some code to Check if the word is a reserved word.
      if it is not a reserved word its an identifier.
      */
-	if(is_reserved_word(extract))
+	
+	if(is_reserved_word(input_token_ptr))
 	{
 		for(i = 0; i < 10; ++i)
 		{
@@ -225,15 +220,23 @@ static Token* get_word(char* input_token_ptr)
 				token_return->token_code = rw_table[length-2][i]->token_code;
 			}
 		}
-			token_return->literal_value = extract;
+
+		token_return->literal_value = input_token_ptr;
 	}
-	else
+	else //not a reserved word
 	{
 		token_return->token_code = IDENTIFIER;
-		token_return->literal_value = extract;
+		token_return->literal_value = input_token_ptr;
 	}
+
+	//update input_token_ptr
+	if(char_table[(int) input_token_ptr[length-1]] ==SPECIAL)
+		input_token_ptr = input_token_ptr[length-1];
+	else
+		input_token_ptr = strtok(NULL, " ");	
+
 	return token_return;	
-	free(extract);
+	//free(extract);
 }
 
 static Token* get_number(char* input_token_ptr)
@@ -244,6 +247,13 @@ static Token* get_number(char* input_token_ptr)
 	Token* token_return;
 	token_return->token_code = NUMBER;
 	token_return->literal_value = input_token_ptr;
+
+	//update input_token_ptr
+	if(char_table[(int) input_token_ptr[length-1]] == SPECIAL)
+		input_token_ptr = input_token_ptr[length-1];
+	else
+		input_token_ptr = strtok(NULL, " ");
+
 	return token_return;
 }
 
@@ -252,35 +262,24 @@ static Token* get_string(char* input_token_ptr)
     /*
      Write some code to Extract the string
      */
-	char* builder = malloc(sizeof(char));
+	//char* builder = malloc(sizeof(char));
+	//char* the_rest;
+
 	int length = strlen(input_token_ptr);
-	char* the_rest;
 	Token* token_return;
 	token_return->token_code = STRING;
-	int i = 0;
-	for(i = 0; i<length; ++i)
-	{
-		builder[i] = input_token_ptr[i];
-	}
-	
-	if(input_token_ptr[length-1] == '\'')
-	{
-		token_return->literal_value = builder;
-	}
-	if(input_token_ptr[length-1] == ' ')
-	{
-		the_rest = strtok(NULL, "\'");
-		builder = strcat(input_token_ptr, the_rest);
-		i = 0;
+	char* string = "";
 
-		while(builder[i] != '\0')
-		{
-			builder[i] = builder[++i];
-		}
-		token_return->literal_value = builder;
-	}
+	//set literal_value and update input_token_ptr
+
+	
+
+	//update input_token_ptr
+	if(input_token_ptr
+	input_token_ptr = strtok(NULL, " "); //points to beginning of next word
+
 	return token_return;	
-	free(builder);
+	//free(builder);
 }
 
 
@@ -291,21 +290,21 @@ static Token* get_special(char *input_string)
      some are double-character.  Set the token appropriately.
      */
 	Token *tokenPtr;
-	char val = input_string;
+	char val = input_string[0];
 	tokenPtr->literal_value = {val,'\0'};
 	tokenPtr->token_code = NO_TOKEN;
 	
 	if(input_string[1] != NULL)
 	{
 		tokenPtr = tokenPtr->next;
-		tokenPtr->literal_value = input_string[1];
+		tokenPtr->literal_value = *input_string[1];
 	}	
 	
 	input_string = strtok(NULL, " ");
 	return tokenPtr;
 
 }
-static char* downshift_word(char string_to_downshift[])
+static char* downshift_word(char* string_to_downshift)
 {
     /*
      Make all of the characters in the incoming word lower case.
@@ -315,20 +314,19 @@ static char* downshift_word(char string_to_downshift[])
 	int i;
 	for(i = 0; i<length; ++i)
 	{
-		string_to_downshift[i] = tolower(string_to_downshift[i]);
+		string_to_downshift[i] = tolower(string_to_downshift[i]); //cast a char?
 	
 	}
    	return string_to_downshift;
 }
 
 
-static BOOLEAN is_reserved_word(char string_to_check[])
+static BOOLEAN is_reserved_word(char* string_to_check)
 {
      /*
      Examine the reserved word table and determine if the function input is a reserved word.
      */
 	
-
 	int length = strlen(string_to_check);
 	int i = 0;
 	for(i = 0; i < 10; ++i)
