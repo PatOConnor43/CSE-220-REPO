@@ -43,11 +43,31 @@ int main(int argc, const char * argv[])
 void add_token_to_list(Token *list, Token *new_token)
 {
     // Add new_token to the list knowing that list is a linked list.
-    while(list->next != NULL)
+    puts(new_token->literal_value);	
+	puts("zzzzzzzzzHHHHAAALLLOOO");
+	
+	if(list == NULL)
 	{
-		list = list->next;
+		puts("HHHHAAALLLOOO");
+		list = new_token;
+		
+		puts(new_token->literal_value);
+		
 	}
-	list->next = new_token;
+	else
+	{
+		puts("WHAT UP");	
+	    while(list->next != NULL)
+		{
+			puts("IT WENT THROUGH WHILE");
+			//printf("%s\n", new_token->literal_value);		
+			//printf("%s\n", list->literal_value);
+			list = list->next;
+		}
+		list->next = new_token;
+		puts("Made it through while loop");
+	}
+	puts("SUCCESS");
 }
 void quit_scanner(FILE *src_file, Token *list)
 {
