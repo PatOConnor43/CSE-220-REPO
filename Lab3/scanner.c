@@ -119,8 +119,8 @@ BOOLEAN get_source_line(char source_buffer[])
 Token* get_token()
 {
     char token_string[MAX_TOKEN_STRING_LENGTH]; //Store your token here as you build it.
-
-    Token* token_return;  //value to be returned
+	Token tok;
+    Token* token_return = &tok;  //value to be returned
 	    
 	if(get_source_line(token_string)) //next line is stored in token_string
 	{
@@ -136,32 +136,44 @@ Token* get_token()
 			{
 				puts("LETTER has been selected");
 				add_token_to_list(token_return, get_word(token_ptr)); //store to token_return
+				token_ptr = strtok(NULL, " ");
+				puts(token_ptr);
 			}
 			else if(char_table[x] == DIGIT)
 			{
 				puts("DIGIT has been selected");
 				add_token_to_list(token_return, get_number(token_ptr));
+				token_ptr = strtok(NULL, " ");
+				puts(token_ptr);
 			}
 			else if(char_table[x] == SPECIAL)
 			{
 				puts("SPECIAL has been selected");
-				if(x == 123) //check if first character is '{'
-					token_ptr = skip_comment(token_ptr);			
+				if(x == 123){ //check if first character is '{'
+					token_ptr = skip_comment(token_ptr);
+					token_ptr = strtok(NULL, " ");
+					puts(token_ptr);
+				}			
 				else 
 					add_token_to_list(token_return, get_special(token_ptr));
+					token_ptr = strtok(NULL, " ");
+					puts(token_ptr);
 			}
 			else if(char_table[x] == QUOTE)
 			{
 				puts("LETTER has been selected");
 				add_token_to_list(token_return, get_string(token_ptr));
+				token_ptr = strtok(NULL, " ");
+				puts(token_ptr);
 			}
 			else //char_table[x] = EOF_CODE //if first character is space in tokenization process
 			{
 				puts("EOF has been selected");
-				char *token_ptr = skip_blanks(token_string);
+				token_ptr = skip_blanks(token_string);
+				
 			}
 
-		} //end while loop			
+		} //end while		
 
 	} //end if statement
 	
@@ -196,8 +208,8 @@ static Token* get_word(char* input_token_ptr)
     /*
      Write some code to Extract the word
      */
-	
-	Token* token_return;
+	Token tok;
+	Token* token_return = &tok;
 	int length = strlen(input_token_ptr);
 	int i = 0;
 	//puts("WORKING.............");
@@ -215,14 +227,14 @@ static Token* get_word(char* input_token_ptr)
 			//puts("HELLO");
 			if(strcmp(rw_table[length-2][i].string, input_token_ptr) == 0)
 			{
-				puts("CHECKING");
+				//puts("CHECKING");
 				token_return->token_code = rw_table[length-2][i].token_code;
 				
 			}
 		}
 
 		token_return->literal_value = input_token_ptr;
-		puts(token_return->literal_value);
+		//puts(token_return->literal_value);
 	}
 	else //not a reserved word
 	{
@@ -231,15 +243,13 @@ static Token* get_word(char* input_token_ptr)
 	}
 
 	//update input_token_ptr
-	if(char_table[(int) input_token_ptr[length-1]] ==SPECIAL)
-		input_token_ptr = &input_token_ptr[length-1];
-	else
-		input_token_ptr = strtok(NULL, " ");	
+	//if(char_table[(int) input_token_ptr[length-1]] ==SPECIAL)
+		//input_token_ptr = &input_token_ptr[length-1];
+	//else
+		//input_token_ptr = strtok(NULL, " ");	
 
-	puts("MADE IT>>>>>>>");	
-	puts(token_return->literal_value);
-	puts(input_token_ptr);
-
+	//puts("MADE IT>>>>>>>");	
+	
 	return token_return;	
 	//free(extract);
 }
@@ -378,3 +388,4 @@ static BOOLEAN is_reserved_word(char* string_to_check)
 	}
     
 }
+
