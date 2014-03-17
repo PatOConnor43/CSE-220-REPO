@@ -71,7 +71,7 @@ void init_scanner(FILE *source_file, char source_name[], char date[])
     strcpy(todays_date, date);
     
     	int i; //initialize character table
-	for(i = 0; i > 265; ++i)
+	for(i = 0; i < 265; ++i)
 	{
 		if(i <= 32 || i == 127)
 			char_table[i] = EOF_CODE;
@@ -103,9 +103,10 @@ BOOLEAN get_source_line(char source_buffer[])
     
     if (fgets(source_buffer, MAX_SOURCE_LINE_LENGTH, src_file) != NULL)
     {
-        ++line_number;
-        sprintf(print_buffer, "%4d: %s", line_number, source_buffer);
+        //line_number++;
+        sprintf(print_buffer, "%4d: %s", ++line_number-3, source_buffer);
         print_line(print_buffer, src_name, todays_date);
+	
         return (TRUE);
     }
     else
@@ -129,19 +130,21 @@ Token* get_token()
 		while(token_ptr != NULL) 
 		{
 			//check the first character of string
-			char dgaf= (char)token_ptr[0];
-			int x = (int)dgaf;
+			int x = (int) token_ptr[0];
+
 			if(char_table[x] == LETTER)
 			{
+				puts("LETTER has been selected");
 				add_token_to_list(token_return, get_word(token_ptr)); //store to token_return
-				printf("%s\n","Son of a bitch!");
 			}
 			else if(char_table[x] == DIGIT)
 			{
+				puts("DIGIT has been selected");
 				add_token_to_list(token_return, get_number(token_ptr));
 			}
 			else if(char_table[x] == SPECIAL)
 			{
+				puts("SPECIAL has been selected");
 				if(x == 123) //check if first character is '{'
 					token_ptr = skip_comment(token_ptr);			
 				else 
@@ -149,10 +152,12 @@ Token* get_token()
 			}
 			else if(char_table[x] == QUOTE)
 			{
+				puts("LETTER has been selected");
 				add_token_to_list(token_return, get_string(token_ptr));
 			}
-			else //char_table[x] = EOF //if first character is space in tokenization process
+			else //char_table[x] = EOF_CODE //if first character is space in tokenization process
 			{
+				puts("EOF has been selected");
 				char *token_ptr = skip_blanks(token_string);
 			}
 
@@ -195,35 +200,29 @@ static Token* get_word(char* input_token_ptr)
 	Token* token_return;
 	int length = strlen(input_token_ptr);
 	int i = 0;
+	//puts("WORKING.............");
 
-/****	
-	char* extract = malloc(sizeof(char));
-	
-
-	for(i = 0; i < length; ++i){
-		extract[i] = input_token_ptr[i];
-	}
-***/
 
     //Downshift the word, to make it lower case
     downshift_word(input_token_ptr); 
-    /*
-     Write some code to Check if the word is a reserved word.
-     if it is not a reserved word its an identifier.
-     */
 	
 	if(is_reserved_word(input_token_ptr))
 	{
-
-		for(i = 0; i < 10; ++i)
+//input_token_ptr = strtok(NULL, " ");
+//puts(input_token_ptr);
+		for(i = 0; rw_table[length-2][i].string != NULL; ++i)
 		{
+			//puts("HELLO");
 			if(strcmp(rw_table[length-2][i].string, input_token_ptr) == 0)
 			{
+				puts("CHECKING");
 				token_return->token_code = rw_table[length-2][i].token_code;
+				
 			}
 		}
 
 		token_return->literal_value = input_token_ptr;
+		puts(token_return->literal_value);
 	}
 	else //not a reserved word
 	{
@@ -236,6 +235,10 @@ static Token* get_word(char* input_token_ptr)
 		input_token_ptr = &input_token_ptr[length-1];
 	else
 		input_token_ptr = strtok(NULL, " ");	
+
+	puts("MADE IT>>>>>>>");	
+	puts(token_return->literal_value);
+	puts(input_token_ptr);
 
 	return token_return;	
 	//free(extract);
@@ -342,20 +345,15 @@ static char* downshift_word(char* string_to_downshift)
     /*
      Make all of the characters in the incoming word lower case.
      */
-	char* downshifted = (char*)malloc(sizeof(char));
-	int i;	
 	int length = strlen(string_to_downshift);
-	for(i = 0; i<length;++i)
-	{
-		downshifted[i] = string_to_downshift[i];
-	}
+	//printf("%i\n", length);
+	int i;
 	for(i = 0; i<length; ++i)
 	{
-		downshifted[i] = tolower(downshifted[i]); //cast a char?
+		string_to_downshift[i] = tolower(string_to_downshift[i]); //cast a char?
 	
 	}
-   	return downshifted;
-	free(downshifted);
+   	return string_to_downshift;
 }
 
 
