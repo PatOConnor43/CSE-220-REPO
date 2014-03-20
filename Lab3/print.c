@@ -71,16 +71,26 @@ void print_token(Token *token)
 	char* concatenate_string[MAX_PRINT_LINE_LENGTH];// = (char*)malloc(sizeof(char));
 	char* start = "  >> ";
 	
-	if(token != NULL )
+	while(token != NULL )
 	{
 		
 		if(token->token_code == NO_TOKEN) //SPECIAL CHARACTERS
 		{
-			sprintf((char*)concatenate_string, "%1s%18s", token->literal_value, token->literal_value);
+			if((token->next)->token_code == NO_TOKEN){
+				sprintf((char*)concatenate_string, "%1s%s%s\t\t\t%s%s", start, token->literal_value, (token->next)->literal_value, token->literal_value, (token->next)->literal_value);
+				token = token->next;
+			}
+
+			else if((token->next)->token_code != NO_TOKEN){
+			sprintf((char*)concatenate_string, "%1s%s\t\t\t%s", start, token->literal_value, token->literal_value);
+			}
 		}
-		if(token->token_code == NUMBER )
+		else if(token->token_code == NUMBER )
 		{
-			sprintf((char*)concatenate_string, "%1s%18s", SYMBOL_STRINGS[NUMBER], token->literal_value);
+			sprintf((char*)concatenate_string, "%1s%s\t\t%s", start, SYMBOL_STRINGS[NUMBER], token->literal_value);
+		}
+		else if(token->token_code == STRING){
+			sprintf((char*)concatenate_string, "%1s%s\t\t%s", start, SYMBOL_STRINGS[STRING], token->literal_value);
 		}
 		else // if it is a word
 		{
