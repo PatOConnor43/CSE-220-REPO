@@ -22,7 +22,7 @@ void add_token_to_list(Token *list, Token *new_token);
 
 int main(int argc, const char * argv[])
 {
-	Token l;
+    Token l;
     Token *token = (Token*)malloc(sizeof(Token));
     Token *token_list = &l; //This needs to be implemented as a linked list in scanner.h.
     char source_name[MAX_FILE_NAME_LENGTH];
@@ -39,7 +39,7 @@ int main(int argc, const char * argv[])
     while (token_list->next != NULL);//What is the sentinal value that ends this loop?
     
     quit_scanner(source_file, token_list);
-	free(token);
+    free(token); //Deallocate memory
     return 0;
 }
 void add_token_to_list(Token *list, Token *new_token)
@@ -83,7 +83,15 @@ void add_token_to_list(Token *list, Token *new_token)
 void quit_scanner(FILE *src_file, Token *list)
 {
     //write code to free all of the memory for the token list
-	free(list);
+    Token *temp;
+    temp= list;
+    while(temp->next != NULL) //free ALL of the linked list.
+    {
+      temp=list;
+      list=list->next;
+      free(temp);
+    }
+      
     fclose(src_file);
 }
 FILE *init_lister(const char *name, char source_file_name[], char dte[])
