@@ -125,7 +125,7 @@ Token* get_token()
 		char *token_ptr = strtok(token_string, " ");//tokenize to point to first non-space character
 
 		//build linked list
-		if(token_ptr != NULL) 
+		while(token_ptr != NULL) 
 		{
 			//check the first character of string
 			int x = (int) token_ptr[0];
