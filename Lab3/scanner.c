@@ -203,56 +203,42 @@ static char* skip_comment(char *string_that_needs_skipping)
 	return string_that_needs_skipping;
 }
 
-
 static Token* get_word(char* input_token_ptr)
 {
-    /*
-     Write some code to Extract the word
-     */
-	//Token tok;
-	Token* token_return = malloc(sizeof(Token));
-	int length = strlen(input_token_ptr);
-	int i = 0;
-	//puts("WORKING.............");
-
-
-    //Downshift the word, to make it lower case
-    downshift_word(input_token_ptr); 
-	
-	if(is_reserved_word(input_token_ptr))
-	{
-//input_token_ptr = strtok(NULL, " ");
-//puts(input_token_ptr);
-		for(i = 0; rw_table[length-2][i].string != NULL; ++i)
+ 	Token tok;
+ 	Token* return_token = &tok;
+ 	counter = 0;
+ 	int i = 0;
+ 	char temp[MAX_PRINT_LINE_LENGTH];
+ 	int length = strlen(input_token_ptr);
+ 	while(char_table[input_token_ptr[counter]] == LETTER)
+ 	{
+ 		temp[counter] = input_token_ptr[counter];
+ 		++counter;
+ 	}
+ 	temp[counter] = '\0';
+ 	length = strlen(temp);
+ 	for(i = 0; i < strlen(temp); ++i)
+ 	{
+ 		temp[i] = tolower(temp[i]);
+ 	}
+ 	tok.literal_value = temp;
+ 	if(is_reserved_word(temp))
+ 	{
+ 		for(i = 0; rw_table[length-2][i].token_code != NO_TOKEN; ++i)
 		{
-			//puts("HELLO");
-			if(strcmp(rw_table[length-2][i].string, input_token_ptr) == 0)
+			
+			if(strcmp((rw_table[length-2][i]).string, temp) == 0)
 			{
-				//puts("CHECKING");
-				token_return->token_code = rw_table[length-2][i].token_code;
+				tok.token_code = rw_table[length-2][i].token_code;
 				
 			}
 		}
-
-		token_return->literal_value = input_token_ptr;
-		//puts(token_return->literal_value);
-	}
-	else //not a reserved word
-	{
-		token_return->token_code = IDENTIFIER;
-		token_return->literal_value = input_token_ptr;
-	}
-
-	//update input_token_ptr
-	//if(char_table[(int) input_token_ptr[length-1]] ==SPECIAL)
-		//input_token_ptr = &input_token_ptr[length-1];
-	//else
-		//input_token_ptr = strtok(NULL, " ");	
-
-	//puts("MADE IT>>>>>>>");	
-	
-	return token_return;	
-	//free(extract);
+ 	}
+ 	else
+ 		tok.token_code = IDENTIFIER;
+ 	tok.next = NULL;
+ 	return return_token;
 }
 
 static Token* get_number(char* input_token_ptr)
@@ -376,21 +362,15 @@ static BOOLEAN is_reserved_word(char* string_to_check)
 	
 	int length = strlen(string_to_check);
 	int i = 0;
-	for(i = 0; i < 10; ++i)
+	for(i = 0; rw_table[length-2][i].token_code != NO_TOKEN; ++i)
 	{
-		if((rw_table[length-2][i].string == NULL) || (string_to_check == NULL))
-		{
-		  return FALSE;
-		}
-		else if(strcmp(rw_table[length-2][i].string, string_to_check) == 0)
+		if(strcmp(rw_table[length-2][i].string, string_to_check) == 0)
 		{
 			return TRUE;
 		}
-		else
-		{
-			return FALSE;
-		}
+				
 	}
+	return FALSE;
     
 }
 
