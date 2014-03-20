@@ -91,7 +91,7 @@ void init_scanner(FILE *source_file, char source_name[], char date[])
      a char as like an int you can use ch in get_token as an index into the table.
      *******************/
     
-}
+}//end init_scanner
 
 //get next line from file and store in source_buffer
 //prints next line
@@ -119,8 +119,8 @@ BOOLEAN get_source_line(char source_buffer[])
 Token* get_token()
 {
     char token_string[MAX_TOKEN_STRING_LENGTH]; //Store your token here as you build it.
-	Token tok;
-    Token* token_return = &tok;  //value to be returned
+    //Token tok;
+    Token* token_return = malloc(sizeof(Token));  //value to be returned
 	    
 	if(get_source_line(token_string)) //next line is stored in token_string
 	{
@@ -134,41 +134,42 @@ Token* get_token()
 
 			if(char_table[x] == LETTER)
 			{
-				puts("LETTER has been selected");
+				//puts("LETTER has been selected");
 				add_token_to_list(token_return, get_word(token_ptr)); //store to token_return
 				token_ptr = strtok(NULL, " ");
-				puts(token_ptr);
+				//puts(token_ptr);
 			}
 			else if(char_table[x] == DIGIT)
 			{
-				puts("DIGIT has been selected");
+				//puts("DIGIT has been selected");
 				add_token_to_list(token_return, get_number(token_ptr));
 				token_ptr = strtok(NULL, " ");
-				puts(token_ptr);
+				//puts(token_ptr);
 			}
 			else if(char_table[x] == SPECIAL)
 			{
-				puts("SPECIAL has been selected");
-				if(x == 123){ //check if first character is '{'
+				//puts("SPECIAL has been selected");
+				if(x == 123)
+				{ //check if first character is '{'
 					token_ptr = skip_comment(token_ptr);
 					token_ptr = strtok(NULL, " ");
-					puts(token_ptr);
+					//puts(token_ptr);
 				}			
 				else 
 					add_token_to_list(token_return, get_special(token_ptr));
 					token_ptr = strtok(NULL, " ");
-					puts(token_ptr);
+					//puts(token_ptr);
 			}
 			else if(char_table[x] == QUOTE)
 			{
-				puts("LETTER has been selected");
+				//puts("LETTER has been selected");
 				add_token_to_list(token_return, get_string(token_ptr));
 				token_ptr = strtok(NULL, " ");
-				puts(token_ptr);
+				//puts(token_ptr);
 			}
 			else //char_table[x] = EOF_CODE //if first character is space in tokenization process
 			{
-				puts("EOF has been selected");
+				//puts("EOF has been selected");
 				token_ptr = skip_blanks(token_string);
 				
 			}
@@ -208,8 +209,8 @@ static Token* get_word(char* input_token_ptr)
     /*
      Write some code to Extract the word
      */
-	Token tok;
-	Token* token_return = &tok;
+	//Token tok;
+	Token* token_return = malloc(sizeof(Token));
 	int length = strlen(input_token_ptr);
 	int i = 0;
 	//puts("WORKING.............");
@@ -259,7 +260,7 @@ static Token* get_number(char* input_token_ptr)
     /*
      Write some code to Extract the number and convert it to a literal number.
      */
-	Token* token_return;
+	Token* token_return=malloc(sizeof(Token));
 	token_return->token_code = NUMBER;
 	token_return->literal_value = input_token_ptr;
 	int length = strlen(input_token_ptr);
@@ -282,7 +283,7 @@ static Token* get_string(char* input_token_ptr)
 	//char* the_rest;
 
 	int length = strlen(input_token_ptr);
-	Token* token_return;
+	Token* token_return=malloc(sizeof(Token));
 	token_return->token_code = STRING;
 	char* string;
 
@@ -332,15 +333,15 @@ static Token* get_special(char *input_string)
      Write some code to Extract the special token.  Most are single-character
      some are double-character.  Set the token appropriately.
      */
-	Token *tokenPtr;
+	Token *tokenPtr=malloc(sizeof(Token));
 	char val = input_string[0];
 	char tmp[]= {val,'\0'};
 	tokenPtr->literal_value = tmp;
-	tokenPtr->token_code = NO_TOKEN;
+	tokenPtr->token_code = val;
 	
 	
 	//update input_string pointer
-	if(input_string[1] != EOF)
+	if(input_string[1] != '\0')
 	{
 		input_string = &input_string[1];
 	}	
@@ -377,7 +378,11 @@ static BOOLEAN is_reserved_word(char* string_to_check)
 	int i = 0;
 	for(i = 0; i < 10; ++i)
 	{
-		if(strcmp(rw_table[length-2][i].string, string_to_check) == 0)
+		if((rw_table[length-2][i].string == NULL) || (string_to_check == NULL))
+		{
+		  return FALSE;
+		}
+		else if(strcmp(rw_table[length-2][i].string, string_to_check) == 0)
 		{
 			return TRUE;
 		}
