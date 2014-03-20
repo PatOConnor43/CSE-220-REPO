@@ -123,20 +123,32 @@ Token* get_token()
 	if(get_source_line(token_string)) //next line is stored in token_string
 	{
 		char *token_ptr = strtok(token_string, " ");//tokenize to point to first non-space character
-
+		puts(token_ptr);
 		//build linked list
 		while(token_ptr != NULL) 
 		{
 			//check the first character of string
 			int x = (int) token_ptr[0];
+			int length = strlen(token_ptr);
 
 			if(char_table[x] == LETTER)
 			{
 				puts("LETTER has been selected");
+				puts(token_ptr);
 				add_token_to_list(token_return, get_word(token_ptr)); //store to token_return
-				
+				puts(token_ptr);
 				
 				//UPDATE POINTER
+				if(counter >= length) //check counter >= length  GO TO NEXT WORD
+				{
+					puts(token_ptr);
+					token_ptr = strtok(NULL, " ");
+					puts(token_ptr);
+				}
+				else
+				{
+					token_ptr = &token_ptr[counter];
+				}
 				
 			}
 			else if(char_table[x] == DIGIT)
@@ -145,17 +157,32 @@ Token* get_token()
 				add_token_to_list(token_return, get_number(token_ptr));
 				
 				//UPDATE POINTER
+				if(counter == length) //check counter >= length  GO TO NEXT WORD
+				{
+					token_ptr = strtok(NULL, " ");
+				}
+				else
+				{
+					token_ptr = &token_ptr[counter];
+				}
 				
 				
 			}
 			else if(char_table[x] == SPECIAL)
 			{
 				puts("SPECIAL has been selected");
-				
+				add_token_to_list(token_return, get_special(token_ptr)); //store to token_return
 				
 				
 				//UPDATE POINTER
-				
+				if(counter == length) //check counter >= length  GO TO NEXT WORD
+				{
+					token_ptr = strtok(NULL, " ");
+				}
+				else
+				{
+					token_ptr = &token_ptr[counter];
+				}
 			}
 			else if(char_table[x] == QUOTE)
 			{
