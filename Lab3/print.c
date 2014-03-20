@@ -59,9 +59,10 @@ void print_line(char line[], char source_name_to_print[], char date_to_print[])
 static void print_page_header(char source_name[], char date[])
 {
     static int page_number = 0;
-    
+    char location[256];
+    getcwd(location,sizeof(location));
     putchar(FORM_FEED_CHAR);
-    printf("Page    %d  %s  %s\n\n", ++page_number, source_name, date);
+    printf("Page    %d  %s  %s\n\n", ++page_number, location, date);
 }
 
 
@@ -71,26 +72,16 @@ void print_token(Token *token)
 	char* concatenate_string[MAX_PRINT_LINE_LENGTH];// = (char*)malloc(sizeof(char));
 	char* start = "  >> ";
 	
-	while(token != NULL )
+	if(token != NULL )
 	{
 		
 		if(token->token_code == NO_TOKEN) //SPECIAL CHARACTERS
 		{
-			if((token->next)->token_code == NO_TOKEN){
-				sprintf((char*)concatenate_string, "%1s%s%s\t\t\t%s%s", start, token->literal_value, (token->next)->literal_value, token->literal_value, (token->next)->literal_value);
-				token = token->next;
-			}
-
-			else if((token->next)->token_code != NO_TOKEN){
-			sprintf((char*)concatenate_string, "%1s%s\t\t\t%s", start, token->literal_value, token->literal_value);
-			}
+			sprintf((char*)concatenate_string, "%1s%18s", token->literal_value, token->literal_value);
 		}
-		else if(token->token_code == NUMBER )
+		if(token->token_code == NUMBER )
 		{
-			sprintf((char*)concatenate_string, "%1s%s\t\t%s", start, SYMBOL_STRINGS[NUMBER], token->literal_value);
-		}
-		else if(token->token_code == STRING){
-			sprintf((char*)concatenate_string, "%1s%s\t\t%s", start, SYMBOL_STRINGS[STRING], token->literal_value);
+			sprintf((char*)concatenate_string, "%1s%18s", SYMBOL_STRINGS[NUMBER], token->literal_value);
 		}
 		else // if it is a word
 		{
