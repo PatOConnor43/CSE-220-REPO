@@ -14,19 +14,9 @@
 #include "scanner.h"
 #include "common.h"
 
-/*******************
- Static functions needed for the scanner
- You need to design the proper parameter list and 
- return types for functions with ???.
- ******************/
-//static ??? get_char(???);
 
-
-static char* skip_comment(char* string_that_needs_skipping);
-static char* skip_blanks(char* string_that_needs_skipping);
 static Token* get_word(char* input_token_ptr);
 static Token* get_number(char* input_token_ptr);
-static Token* get_string(char* input_token_ptr);
 static Token* get_special(char* input_string);
 static char* downshift_word(char* string_to_downshift);
 static BOOLEAN is_reserved_word(char* string_to_check);
@@ -85,26 +75,23 @@ void init_scanner(FILE *source_file, char source_name[], char date[])
 			char_table[i] = SPECIAL;
 
 	}//end loop
-    /*******************
-     initialize character table, this table is useful for identifying what type of character 
-     we are looking at by setting our array up to be a copy the ascii table.  Since C thinks of 
-     a char as like an int you can use ch in get_token as an index into the table.
-     *******************/
     
-}//end init_scanner
+}
 
 //get next line from file and store in source_buffer
 //prints next line
+
+int line_number = 0;
 BOOLEAN get_source_line(char source_buffer[])
 {
     char print_buffer[MAX_SOURCE_LINE_LENGTH + 9];
 //    char source_buffer[MAX_SOURCE_LINE_LENGTH];  //I've moved this to a function parameter.  Why did I do that?
-    static int line_number = 0;
+    
     
     if (fgets(source_buffer, MAX_SOURCE_LINE_LENGTH, src_file) != NULL)
     {
-        //line_number++;
-        sprintf(print_buffer, "%4d: %s", ++line_number-3, source_buffer);
+       sprintf(print_buffer, "%4d: %s", ++line_number, source_buffer);
+       
         print_line(print_buffer, src_name, todays_date);
 	
         return (TRUE);
@@ -116,92 +103,188 @@ BOOLEAN get_source_line(char source_buffer[])
 }
 
 
+//declare counter to 0 in every get function
+//update pointer in get_token()
+/*** AT THE END OF WHILE LOOP
+if counter == length -1
+	call token_ptr = strtok(NULL, " "); 
+else
+	&token_ptr = token_ptr[counter + 1]
+
+
+*****/
+int counter = 0; 
 Token* get_token()
 {
     char token_string[MAX_TOKEN_STRING_LENGTH]; //Store your token here as you build it.
-    //Token tok;
-    Token* token_return = malloc(sizeof(Token));  //value to be returned
+
+    Token* token_return = NULL;  //value to be returned
 	    
 	if(get_source_line(token_string)) //next line is stored in token_string
 	{
-		char *token_ptr = skip_blanks(token_string); //tokenize to point to first non-space character
-
+		char *token_ptr = strtok(token_string, " ");//tokenize to point to first non-space character
+//		puts("33333333333333333333333");
+//		puts(token_ptr);
+//		puts("33333333333333333333333");
+		
 		//build linked list
 		while(token_ptr != NULL) 
 		{
 			//check the first character of string
+			puts(token_ptr);			
 			int x = (int) token_ptr[0];
+			int length = strlen(token_ptr);
 
 			if(char_table[x] == LETTER)
 			{
-				//puts("LETTER has been selected");
+				puts("LETTER has been selected");
 				add_token_to_list(token_return, get_word(token_ptr)); //store to token_return
-				token_ptr = strtok(NULL, " ");
-				//puts(token_ptr);
+				
+				//UPDATE POINTER
+				if(counter >= length) //check counter >= length  GO TO NEXT WORD
+				{
+					token_ptr = strtok(NULL, " ");
+				}
+				else
+				{
+					token_ptr = &token_ptr[counter];
+				}
+				
 			}
 			else if(char_table[x] == DIGIT)
 			{
-				//puts("DIGIT has been selected");
+				puts("DIGIT has been selected");
 				add_token_to_list(token_return, get_number(token_ptr));
-				token_ptr = strtok(NULL, " ");
-				//puts(token_ptr);
+				
+				//UPDATE POINTER
+				if(counter == length) //check counter >= length  GO TO NEXT WORD
+				{
+					token_ptr = strtok(NULL, " ");
+				}
+				else
+				{
+					token_ptr = &token_ptr[counter];
+				}
+				
+				
 			}
 			else if(char_table[x] == SPECIAL)
 			{
-				//puts("SPECIAL has been selected");
-				if(x == 123)
-				{ //check if first character is '{'
-					token_ptr = skip_comment(token_ptr);
+				puts("SPECIAL has been selected"); 
+				Token tmp; Token* tmpPtr = &tmp; 
+				//tmpPtr->literal_value = (char*)token_ptr[0]; 
+				sprintf(tmpPtr->literal_value, "%c", token_ptr[0]);
+				tmpPtr->token_code = NO_TOKEN; 
+				tmpPtr->next = NULL; 
+				
+				if(char_table[(int) token_ptr[1]] != EOF_CODE)
+				{
+					puts("FIRST IF It's selecting SPECIAL");
+					token_ptr = &token_ptr[1];
+				}
+				else if(char_table[(int) token_ptr[0]] == EOF_CODE)
+				{
+					puts("It's selecting SPECIAL");
+					token_ptr = NULL;
+				}
+				else
+				{
+					puts("ELSE It's selecting SPECIAL");
 					token_ptr = strtok(NULL, " ");
-					//puts(token_ptr);
-				}			
-				else 
-					add_token_to_list(token_return, get_special(token_ptr));
-					token_ptr = strtok(NULL, " ");
-					//puts(token_ptr);
+				}
+				
+				
+				add_token_to_list(token_return, tmpPtr); //UPDATE POINTER
+				
 			}
 			else if(char_table[x] == QUOTE)
 			{
-				//puts("LETTER has been selected");
-				add_token_to_list(token_return, get_string(token_ptr));
-				token_ptr = strtok(NULL, " ");
-				//puts(token_ptr);
+				puts("QUOTE has been selected"); //PRINT
+				Token tmp ;
+				tmp.token_code = STRING;
+				tmp.next = NULL; 
+				
+				char tmp_string[20];
+				
+				BOOLEAN found = FALSE;
+				int j = 1;
+				int length = strlen(token_ptr);
+				
+				
+				for(; j < length; ++j)
+				{
+					
+					if((int)token_ptr[j] == 39)
+					{
+						found = TRUE;
+						break;
+					}
+					else
+					{
+						tmp_string[j-1] = token_ptr[j];
+					}
+				}
+				
+				if(found == TRUE)
+				{
+					token_ptr = &token_ptr[j+1]; //UPDATE POINTER 
+				}
+				else
+				{
+					counter = 0;
+					while(!found)
+					{
+						sprintf(tmp_string, "%s%s", tmp_string, " ");
+						token_ptr = strtok(NULL, " ");
+					
+						length = strlen(token_ptr);
+						int i = 0;
+						for(; i < length; ++i)
+						{
+							if((int)token_ptr[i] == 39)
+							{
+								found = TRUE;
+								counter = i + 1;
+								break;
+							}
+							else
+								sprintf(tmp_string, "%s%c", tmp_string, token_ptr[i]);
+						}
+						token_ptr = &token_ptr[counter];  //UPDATE POINTER
+					}
+				}
+				
+				
+				tmp.literal_value = tmp_string;
+				
+				add_token_to_list(token_return, tmp);
+				
+				//print_token(&tmp);
+
 			}
-			else //char_table[x] = EOF_CODE //if first character is space in tokenization process
+			else //char_table[x] = EOF_CODE 
 			{
-				//puts("EOF has been selected");
-				token_ptr = skip_blanks(token_string);
+				puts("EOF has been selected");
+				while(token_return->next != NULL)
+				{
+					puts(token_return->literal_value);
+					token_return = token_return->next;
+				}
+				token_ptr = NULL;
 				
 			}
-
-		} //end while		
-
+			
+			
+		
+		} //end while loop			
+		
 	} //end if statement
 	
+	print_token(token_return);
+	puts("aaaaaaallllllllllloooooooooooo");
 	return token_return;
 }// end function
 
-
-//returns pointer that points to first non-space character in the word
-static char* skip_blanks(char *string_that_needs_skipping)
-{
-	char *ptr = strtok(string_that_needs_skipping, " ");
-	return ptr;
-}
-
-
-static char* skip_comment(char *string_that_needs_skipping)
-{
-    /*
-     Write some code to skip past the comments in the program and return a pointer
-     to the first non blank character.  Watch out for the EOF character.
-     */
-	string_that_needs_skipping = strtok(NULL,"}"); //variable to tokenize comment
-	if(string_that_needs_skipping != NULL)
-		string_that_needs_skipping = strtok(NULL," ");
-	
-	return string_that_needs_skipping;
-}
 
 static Token* get_word(char* input_token_ptr)
 {
@@ -238,6 +321,8 @@ static Token* get_word(char* input_token_ptr)
  	else
  		tok.token_code = IDENTIFIER;
  	tok.next = NULL;
+ 	printf("%d\n", counter);
+ 	
  	return return_token;
 }
 
@@ -246,71 +331,24 @@ static Token* get_number(char* input_token_ptr)
     /*
      Write some code to Extract the number and convert it to a literal number.
      */
-	Token* token_return=malloc(sizeof(Token));
-	token_return->token_code = NUMBER;
-	token_return->literal_value = input_token_ptr;
-	int length = strlen(input_token_ptr);
-
-	//update input_token_ptr
-	if(char_table[(int) input_token_ptr[length-1]] == SPECIAL)
-		input_token_ptr = &input_token_ptr[length-1];
-	else
-		input_token_ptr = strtok(NULL, " ");
-
-	return token_return;
-}
-
-static Token* get_string(char* input_token_ptr)
-{
-    /*
-     Write some code to Extract the string
-     */
-	//char* builder = malloc(sizeof(char));
-	//char* the_rest;
-
-	int length = strlen(input_token_ptr);
-	Token* token_return=malloc(sizeof(Token));
-	token_return->token_code = STRING;
-	char* string;
-
-	//set literal_value and update input_token_ptr
-	if(strspn(input_token_ptr, (char*)'\'') == 2) //contains the entire comment in first word
-	{
-		int i;
-		for(i = 1; i < length; ++i)
-			if(input_token_ptr[i] == '\'')
-				break;
-		
-		int j;
-		for(j = 1; j < i; ++j)
-			token_return->literal_value[j] = input_token_ptr[j];
-		
-		//update pointer's address
-		input_token_ptr = &input_token_ptr[i+1];
+	counter = 0;
+	Token tok;
+	Token* return_tok = &tok;
+	char temp[10];
+	while(char_table[input_token_ptr[counter]] == DIGIT || input_token_ptr[counter] == '-' || input_token_ptr[counter] == 'e'){
+		temp[counter] = input_token_ptr[counter];
+		printf("%c\n", temp[counter]);
+		++counter;
 	}
-	else
-	{
-		string = &input_token_ptr[1];
-		input_token_ptr = strtok(NULL, " ");//go to next word
 		
-		while(strspn(input_token_ptr, (char*)'\'') != 1 ) //find second apostrophe
-		{
-			sprintf(string, " %s", input_token_ptr);
-			input_token_ptr = strtok(NULL, " ");
-			if(input_token_ptr == NULL) //reach EOF before reaching apostrophe
-			{
-				return token_return = NULL;
-			}
-		}
-	}
+	return_tok->literal_value = temp;
+	return_tok->token_code = NUMBER;
+	return_tok->next = NULL;
+	return return_tok;
 	
-
-	//update input_token_ptr
-	//points to beginning of next word
-
-	return token_return;	
-
+	
 }
+
 
 
 static Token* get_special(char *input_string)
@@ -319,24 +357,21 @@ static Token* get_special(char *input_string)
      Write some code to Extract the special token.  Most are single-character
      some are double-character.  Set the token appropriately.
      */
-	Token *tokenPtr=malloc(sizeof(Token));
+     	counter = 0;
+	Token *token_return;
 	char val = input_string[0];
 	char tmp[]= {val,'\0'};
-	tokenPtr->literal_value = tmp;
-	tokenPtr->token_code = val;
+	token_return->literal_value = tmp;
+	token_return->token_code = NO_TOKEN;
+	token_return->next = NULL;
+	++counter;
 	
-	
-	//update input_string pointer
-	if(input_string[1] != '\0')
-	{
-		input_string = &input_string[1];
-	}	
-	else
-		input_string = strtok(NULL, " ");
 
-	return tokenPtr;
+	return token_return;
 
 }
+
+//WORKS
 static char* downshift_word(char* string_to_downshift)
 {
     /*
@@ -353,7 +388,7 @@ static char* downshift_word(char* string_to_downshift)
    	return string_to_downshift;
 }
 
-
+//WORKS
 static BOOLEAN is_reserved_word(char* string_to_check)
 {
      /*
@@ -373,4 +408,3 @@ static BOOLEAN is_reserved_word(char* string_to_check)
 	return FALSE;
     
 }
-
