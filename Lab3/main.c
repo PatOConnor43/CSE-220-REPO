@@ -43,7 +43,7 @@ int main(int argc, const char * argv[])
 }
 void add_token_to_list(Token *list, Token *new_token)
 {
-	
+	Token *temp=(Token*)malloc(sizeof(Token));
 	if(list == NULL)
 	{
 		list = new_token;
@@ -51,13 +51,13 @@ void add_token_to_list(Token *list, Token *new_token)
 	}
 	else
 	{	
-	    while(list->next != NULL)
+	    temp=list;
+	    while(temp->next != NULL)
 		{
-			list = list->next;
+			temp = temp->next;
 		}
-		list->next = new_token;
+		temp->next = new_token;
 	}
-}
 void quit_scanner(FILE *src_file, Token *list)
 {
     //write code to free all of the memory for the token list
