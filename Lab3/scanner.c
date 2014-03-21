@@ -122,6 +122,14 @@ Token* get_token()
 	    
 	if(get_source_line(token_string)) //next line is stored in token_string
 	{
+		int k = 0;
+		while((int) token_string[k] == 9)
+		{
+			puts("INSIDE WHILE LOOP");
+			token_string[k] = ' ';
+			++k;
+		}
+		
 		char *token_ptr = strtok(token_string, " ");//tokenize to point to first non-space character
 //		puts("33333333333333333333333");
 //		puts(token_ptr);
