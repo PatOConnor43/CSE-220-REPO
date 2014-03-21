@@ -206,7 +206,7 @@ Token* get_token()
 						break;
 					}
 					else
-						tmp_string[j] = token_ptr[j];
+						tmp_string[j-1] = token_ptr[j];
 				}
 
 				
