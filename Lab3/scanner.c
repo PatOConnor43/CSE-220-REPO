@@ -11,6 +11,7 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "scanner.h"
 #include "common.h"
 
@@ -125,28 +126,25 @@ Token* get_token()
 		int k = 0;
 		while((int) token_string[k] == 9)
 		{
-			puts("INSIDE WHILE LOOP");
 			token_string[k] = ' ';
 			++k;
 		}
 		
 		char *token_ptr = strtok(token_string, " ");//tokenize to point to first non-space character
-//		puts("33333333333333333333333");
-//		puts(token_ptr);
-//		puts("33333333333333333333333");
+
 		
 		//build linked list
 		while(token_ptr != NULL) 
 		{
 			//check the first character of string
-			puts(token_ptr);			
+			puts(token_ptr);	//PRINT		
 			int x = (int) token_ptr[0];
 			int length = strlen(token_ptr);
 
 			if(char_table[x] == LETTER)
 			{
 				puts("LETTER has been selected");
-				add_token_to_list(token_return, get_word(token_ptr)); //store to token_return
+				add_token_to_list(&token_return, get_word(token_ptr)); //store to token_return
 				
 				//UPDATE POINTER
 				if(counter >= length) //check counter >= length  GO TO NEXT WORD
@@ -162,7 +160,7 @@ Token* get_token()
 			else if(char_table[x] == DIGIT)
 			{
 				puts("DIGIT has been selected");
-				add_token_to_list(token_return, get_number(token_ptr));
+				add_token_to_list(&token_return, get_number(token_ptr));
 				
 				//UPDATE POINTER
 				if(counter == length) //check counter >= length  GO TO NEXT WORD
@@ -178,7 +176,7 @@ Token* get_token()
 			}
 			else if(char_table[x] == SPECIAL)
 			{
-				puts("SPECIAL has been selected"); 
+				puts("SPECIAL has been selected"); //PRINT
 				Token tmp; Token* tmpPtr = &tmp; 
 				//tmpPtr->literal_value = (char*)token_ptr[0]; 
 				sprintf(tmpPtr->literal_value, "%c", token_ptr[0]);
@@ -187,22 +185,22 @@ Token* get_token()
 				
 				if(char_table[(int) token_ptr[1]] != EOF_CODE)
 				{
-					puts("FIRST IF It's selecting SPECIAL");
+					puts("FIRST IF It's selecting SPECIAL");  //PRINT
 					token_ptr = &token_ptr[1];
 				}
-				else if(char_table[(int) token_ptr[0]] == EOF_CODE)
+				/*else if(char_table[(int) token_ptr[0]] == EOF_CODE)
 				{
-					puts("It's selecting SPECIAL");
+					puts("It's selecting SPECIAL"); //PRINT
 					token_ptr = NULL;
-				}
+				}*/
 				else
 				{
-					puts("ELSE It's selecting SPECIAL");
+					puts("ELSE It's selecting SPECIAL"); //PRINT
 					token_ptr = strtok(NULL, " ");
 				}
 				
 				
-				add_token_to_list(token_return, tmpPtr); //UPDATE POINTER
+				add_token_to_list(&token_return, tmpPtr); //UPDATE POINTER
 				
 			}
 			else if(char_table[x] == QUOTE)
@@ -265,7 +263,7 @@ Token* get_token()
 				
 				tmp.literal_value = tmp_string;
 				
-				add_token_to_list(token_return, tmp);
+				add_token_to_list(&token_return, tmp);
 				
 				//print_token(&tmp);
 
@@ -278,18 +276,20 @@ Token* get_token()
 					puts(token_return->literal_value);
 					token_return = token_return->next;
 				}
-				token_ptr = NULL;
-				
-			}
-			
-			
+				token_ptr = NULL;	
+			}	
 		
+			if(token_return != NULL) //PRINT
+			{
+				puts("1111111111111111");
+				puts(token_return->literal_value);		
+				puts("111111111111111111");
+			}
 		} //end while loop			
 		
 	} //end if statement
 	
-	print_token(token_return);
-	puts("aaaaaaallllllllllloooooooooooo");
+
 	return token_return;
 }// end function
 
