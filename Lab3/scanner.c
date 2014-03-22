@@ -296,8 +296,7 @@ Token* get_token()
 
 static Token* get_word(char* input_token_ptr)
 {
- 	Token tok;
- 	Token* return_token = &tok;
+ 	Token* return_token = malloc(sizeof(*return_token));
  	counter = 0;
  	int i = 0;
  	char temp[MAX_PRINT_LINE_LENGTH];
@@ -313,7 +312,7 @@ static Token* get_word(char* input_token_ptr)
  	{
  		temp[i] = tolower(temp[i]);
  	}
- 	tok.literal_value = temp;
+ 	strcpy(return_token->literal_value, temp);
  	if(is_reserved_word(temp))
  	{
  		for(i = 0; rw_table[length-2][i].token_code != NO_TOKEN; ++i)
@@ -321,15 +320,14 @@ static Token* get_word(char* input_token_ptr)
 			
 			if(strcmp((rw_table[length-2][i]).string, temp) == 0)
 			{
-				tok.token_code = rw_table[length-2][i].token_code;
+				return_token->token_code = rw_table[length-2][i].token_code;
 				
 			}
 		}
  	}
  	else
- 		tok.token_code = IDENTIFIER;
- 	tok.next = NULL;
- 	printf("%d\n", counter);
+ 		return_token->token_code = IDENTIFIER;
+ 	return_token->next = NULL;
  	
  	return return_token;
 }
@@ -340,12 +338,13 @@ static Token* get_number(char* input_token_ptr)
      Write some code to Extract the number and convert it to a literal number.
      */
 	counter = 0;
-	Token tok;
-	Token* return_tok = &tok;
+	Token* return_tok = malloc(sizeof(*return_tok));
 	char temp[10];
-	while(char_table[input_token_ptr[counter]] == DIGIT || input_token_ptr[counter] == '-' || input_token_ptr[counter] == 'e'){
+	
+	while(char_table[input_token_ptr[counter]] == DIGIT || input_token_ptr[counter] == '-' || input_token_ptr[counter] == 'e')
+	{
 		temp[counter] = input_token_ptr[counter];
-		printf("%c\n", temp[counter]);
+		printf("%c\n", temp[counter]);  	//PRINT
 		++counter;
 	}
 		
@@ -366,7 +365,7 @@ static Token* get_special(char *input_string)
      some are double-character.  Set the token appropriately.
      */
      	counter = 0;
-	Token *token_return;
+	Token *token_return = malloc(sizeof(*token_return));;
 	char val = input_string[0];
 	char tmp[]= {val,'\0'};
 	token_return->literal_value = tmp;
